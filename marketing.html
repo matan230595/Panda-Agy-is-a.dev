@@ -2,20 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Matan | Marketing OS</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Heebo:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <script src="config.js"></script>
     <style>
         :root { --window-bg: #f8fafc; --header-bg: #e2e8f0; --accent: #2563eb; --text-dark: #0f172a; --text-light: #475569; }
-        body { margin: 0; font-family: 'Inter', 'Heebo', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; }
         
-        .desktop { width: 100%; max-width: 1000px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        body { 
+            margin: 0; 
+            font-family: 'Inter', 'Heebo', sans-serif; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            overflow: hidden; /* מונע גלילה ראשית */
+        }
         
-        .mac-window { width: 95%; height: 85vh; max-height: 750px; background: var(--window-bg); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 2; box-shadow: 0 50px 100px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
+        .desktop { 
+            width: 100%; 
+            max-width: 1000px; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative; 
+        }
+        
+        /* חלון ראשי */
+        .mac-window { 
+            width: 95%; 
+            height: 85vh; 
+            max-height: 750px; 
+            background: var(--window-bg); 
+            border-radius: 16px; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+            position: relative; 
+            z-index: 2; 
+            box-shadow: 0 50px 100px rgba(0,0,0,0.5); 
+            border: 1px solid rgba(255,255,255,0.1); 
+        }
         .mac-window.rtl { direction: rtl; text-align: right; }
 
-        .header { background: var(--header-bg); padding: 8px 15px; display: flex; align-items: center; justify-content: space-between; height: 45px; border-bottom: 1px solid #cbd5e1; }
+        /* Header */
+        .header { background: var(--header-bg); padding: 8px 15px; display: flex; align-items: center; justify-content: space-between; height: 45px; border-bottom: 1px solid #cbd5e1; flex-shrink: 0; }
         .dots { display: flex; gap: 6px; } .dot { width: 12px; height: 12px; border-radius: 50%; }
         .red { background: #ff5f56; cursor:pointer; } .yellow { background: #ffbd2e; } .green { background: #27c93f; }
 
@@ -31,23 +65,25 @@
         .lang-box:hover .lang-menu { display: flex; }
         .lang-opt { font-size: 13px; padding: 5px; cursor: pointer; } .lang-opt:hover { color: var(--accent); background: #eff6ff; }
 
-        .content { flex-grow: 1; overflow-y: auto; padding: 30px; background: var(--window-bg); }
+        /* Content Area */
+        .content { flex-grow: 1; overflow-y: auto; padding: 30px; background: var(--window-bg); -webkit-overflow-scrolling: touch; }
         .fade { animation: fadeIn 0.4s ease-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Typography */
         h1 { font-family: 'Montserrat', sans-serif; font-size: 32px; margin: 0 0 10px 0; color: var(--text-dark); }
         .badge { background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 20px; }
         .bio { font-size: 15px; line-height: 1.6; color: var(--text-light); max-width: 800px; margin-bottom: 30px; }
         
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-bottom: 20px; }
-        @media(max-width:700px){ .grid{grid-template-columns: repeat(2,1fr);} }
-        @media(max-width:500px){ .grid{grid-template-columns: 1fr;} .mac-window{height:85vh;} }
-
-        .card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.2s; }
+        /* Grid System */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-bottom: 40px; }
+        
+        .card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; justify-content: center; }
         .card:hover { transform: translateY(-3px); border-color: var(--accent); }
         .c-icon { font-size: 24px; display: block; margin-bottom: 5px; }
-        .c-title { font-weight: 700; font-size: 13px; color: var(--text-dark); display: flex; justify-content: space-between; }
-        .c-sub { font-size: 11px; color: #94a3b8; }
+        .c-title { font-weight: 700; font-size: 13px; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center; }
+        .c-sub { font-size: 11px; color: #94a3b8; margin-top: 3px; }
 
+        /* Services Inner Page */
         .svc-tag { color: var(--accent); font-weight: 700; font-size: 11px; text-transform: uppercase; background: #eff6ff; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
         .svc-desc { font-size: 15px; line-height: 1.6; color: var(--text-light); margin-bottom: 20px; }
         .feats { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
@@ -55,13 +91,46 @@
         .check { color: #238636; font-weight: bold; }
         .cta { background: var(--accent); color: white; padding: 10px 25px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-block; }
 
-        .dock-wrap { margin-top: -30px; z-index: 100; position: relative; }
+        /* Dock */
+        .dock-wrap { margin-top: -30px; z-index: 100; position: relative; width: 100%; display: flex; justify-content: center; }
         .dock { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); padding: 10px 20px; border-radius: 20px; display: flex; gap: 15px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
         .d-btn { width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; transition: 0.3s; border-radius: 12px; background: white; position: relative; }
         .d-btn:hover { transform: translateY(-15px) scale(1.15); z-index: 10; }
         .d-btn svg { width: 26px; height: 26px; }
         
-        .copy { margin-top: 35px; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 500; }
+        .copy { margin-top: 25px; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 500; }
+
+        /* --- התאמות למובייל (Mobile) --- */
+        @media (max-width: 700px) {
+            .grid { grid-template-columns: repeat(2, 1fr); } /* 2 עמודות בטאבלט */
+        }
+
+        @media (max-width: 500px) {
+            /* תיקון הגובה והמיקום */
+            .desktop { justify-content: flex-start; padding-top: 5vh; }
+            .mac-window { height: 75vh; width: 92%; } /* מקטינים קצת כדי להשאיר מקום לדוק */
+            
+            /* גריד 2 עמודות בנייד + עיצוב קומפקטי */
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .card { padding: 12px; text-align: center; }
+            .c-title { flex-direction: column; gap: 2px; font-size: 12px; }
+            .c-title span { display: none; } /* הסתרת החץ בנייד לחסכון מקום */
+            .c-icon { font-size: 20px; margin-bottom: 5px; }
+            .content { padding: 20px; }
+
+            /* הרמת הדוק למעלה */
+            .dock-wrap { margin-top: -20px; margin-bottom: 10px; } 
+            .dock { padding: 8px 15px; gap: 10px; }
+            .d-btn { width: 42px; height: 42px; }
+            .d-btn svg { width: 22px; height: 22px; }
+            
+            /* כותרות קטנות יותר */
+            h1 { font-size: 24px; }
+            .bio { font-size: 13px; }
+            
+            /* סידור הפיצ'רים בטור אחד בנייד */
+            .feats { grid-template-columns: 1fr; gap: 5px; }
+        }
     </style>
 </head>
 <body>
