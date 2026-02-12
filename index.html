@@ -3,142 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matan | Developer Portfolio</title>
+    <title>Matan | Terminal Portfolio</title>
     <style>
-        :root {
-            --bg: #0d1117; --term-bg: #161b22; --header: #21262d;
-            --text: #c9d1d9; --green: #27c93f; --blue: #58a6ff; --border: #30363d;
-        }
-        body {
-            background-color: var(--bg); color: var(--text);
-            font-family: 'Courier New', monospace;
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; min-height: 100vh; margin: 0; padding: 20px;
-        }
-        .lang-switcher {
-            margin-bottom: 20px; display: flex; gap: 15px;
-            background: var(--term-bg); padding: 10px 25px;
-            border-radius: 30px; border: 1px solid var(--border);
-        }
-        .lang-btn { cursor: pointer; font-size: 0.9rem; font-weight: bold; color: #8b949e; transition: 0.2s; }
-        .lang-btn:hover { color: var(--blue); }
-        .lang-btn.active { color: var(--blue); border-bottom: 2px solid var(--blue); }
-
-        .terminal-window {
-            background: var(--term-bg); width: 100%; max-width: 650px;
-            border-radius: 8px; border: 1px solid var(--border); overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .terminal-header { background: var(--header); padding: 12px 15px; display: flex; align-items: center; }
-        .buttons { display: flex; gap: 8px; }
-        .btn { width: 12px; height: 12px; border-radius: 50%; }
-        .terminal-body { padding: 20px; height: 380px; overflow-y: auto; text-align: left; }
-        
-        .line { display: flex; margin-bottom: 10px; opacity: 0; animation: fadeIn 0.3s forwards; }
+        :root { --bg: #0d1117; --term: #161b22; --text: #c9d1d9; --green: #238636; --blue: #58a6ff; }
+        body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .terminal { background: var(--term); width: 95%; max-width: 700px; border-radius: 10px; border: 1px solid #30363d; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .header { background: #21262d; padding: 10px; display: flex; gap: 8px; align-items: center; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .body { padding: 20px; height: 450px; overflow-y: auto; scroll-behavior: smooth; }
+        .line { margin-bottom: 12px; opacity: 0; animation: fadeIn 0.3s forwards; }
         .prompt { color: var(--green); font-weight: bold; margin-right: 10px; }
-        .output { color: #8b949e; padding-left: 25px; display: block; line-height: 1.6; }
-        
-        .marketing-link { 
-            color: #fff; background: #238636; padding: 2px 8px; 
-            border-radius: 4px; text-decoration: none; font-weight: bold;
-        }
-        .marketing-link:hover { background: #2ea043; }
-
+        .output { color: #8b949e; padding-left: 25px; line-height: 1.6; }
+        a { color: var(--blue); text-decoration: none; }
+        .marketing-btn { background: var(--green); color: white; padding: 4px 10px; border-radius: 4px; font-weight: bold; text-decoration: none; }
         @keyframes fadeIn { to { opacity: 1; } }
-        .cursor { display: inline-block; width: 8px; height: 16px; background: var(--text); animation: blink 1s infinite; vertical-align: middle; }
+        .cursor { display: inline-block; width: 8px; height: 16px; background: #fff; animation: blink 1s infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
-
-    <div class="lang-switcher">
-        <div class="lang-btn active" onclick="setLang('en')" id="btn-en">ENGLISH (US)</div>
-        <div class="lang-btn" onclick="setLang('es')" id="btn-es">ESPAÑOL (ES)</div>
-    </div>
-
-    <div class="terminal-window">
-        <div class="terminal-header">
-            <div class="buttons">
-                <div class="btn" style="background:#ff5f56"></div>
-                <div class="btn" style="background:#ffbd2e"></div>
-                <div class="btn" style="background:#27c93f"></div>
-            </div>
-            <div id="term-title" style="margin-left:15px; color:#8b949e; font-size:0.8rem;">matan@portfolio ~ bash</div>
+    <div class="terminal">
+        <div class="header">
+            <div class="dot" style="background:#ff5f56"></div>
+            <div class="dot" style="background:#ffbd2e"></div>
+            <div class="dot" style="background:#27c93f"></div>
+            <span style="margin-left:10px; font-size:12px; color:#8b949e">matan@dev-environment ~ bash</span>
         </div>
-        <div class="terminal-body" id="console"></div>
+        <div class="body" id="console"></div>
     </div>
 
 <script>
-    const content = {
-        en: {
-            title: "matan@portfolio ~ bash",
-            lines: [
-                { t: "input", v: "whoami" },
-                { t: "output", v: "Matan - Full Stack Developer & Digital Marketer." },
-                { t: "input", v: "ls services/" },
-                { t: "output", v: "1. Web_Development<br>2. SEO_&_Digital_Marketing" },
-                { t: "input", v: "run marketing_tool" },
-                { t: "output", v: "Found: Growth Analyzer v1.0<br>Click here to launch: <a href='marketing.html' class='marketing-link'>OPEN_MARKETING_CARD</a>" }
-            ]
-        },
-        es: {
-            title: "matan@portafolio ~ bash",
-            lines: [
-                { t: "input", v: "quien_soy" },
-                { t: "output", v: "Matan - Desarrollador Full Stack y Experto en Marketing." },
-                { t: "input", v: "ls servicios/" },
-                { t: "output", v: "1. Desarrollo_Web<br>2. SEO_y_Marketing_Digital" },
-                { t: "input", v: "run marketing_tool" },
-                { t: "output", v: "Encontrado: Analizador de Crecimiento v1.0<br>Haga clic para abrir: <a href='marketing.html' class='marketing-link'>ABRIR_TARJETA_DE_MARKETING</a>" }
-            ]
+    const content = [
+        { t: "input", v: "whoami" },
+        { t: "output", v: "Matan: Full Stack Developer specializing in scalable web solutions." },
+        { t: "input", v: "ls ./skills" },
+        { t: "output", v: "• Frontend: React, JS(ES6), CSS3/HTML5<br>• Backend: Node.js, Python, PostgreSQL<br>• Tools: Git, Docker, Linux Shell" },
+        { t: "input", v: "ls ./projects" },
+        { t: "output", v: "📂 <a href='#'>Terminal-OS</a> - Personal portfolio (This)<br>📂 <a href='#'>Marketing-Hub</a> - Business Dashboard<br>📂 <a href='#'>E-com-Engine</a> - High-traffic backend" },
+        { t: "input", v: "socials --list" },
+        { t: "output", v: "GitHub: <a href='https://github.com/matan230595'>@matan230595</a><br>LinkedIn: <a href='#'>/in/matan</a><br>Email: matan230595@gmail.com" },
+        { t: "input", v: "sudo run marketing_mode" },
+        { t: "output", v: "Switching to Business Perspective...<br><br><a href='marketing.html' class='marketing-btn'>LAUNCH MARKETING CARD</a>" },
+        { t: "final" }
+    ];
+
+    let i = 0;
+    const consoleDiv = document.getElementById('console');
+
+    function type() {
+        if (i >= content.length) return;
+        const line = content[i];
+        const div = document.createElement('div');
+        div.className = 'line';
+        
+        if (line.t === "input") {
+            div.innerHTML = `<span class="prompt">➜</span> <span>${line.v}</span>`;
+        } else if (line.t === "output") {
+            div.className = "output line";
+            div.innerHTML = line.v;
+        } else if (line.t === "final") {
+            div.innerHTML = `<span class="prompt">➜</span> <span class="cursor"></span>`;
         }
-    };
 
-    let currentLang = 'en';
-
-    function setLang(lang) {
-        currentLang = lang;
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + lang).classList.add('active');
-        document.getElementById('term-title').innerText = content[lang].title;
-        renderTerminal();
+        consoleDiv.appendChild(div);
+        i++;
+        setTimeout(type, 600);
+        consoleDiv.scrollTop = consoleDiv.scrollHeight;
     }
-
-    function renderTerminal() {
-        const consoleDiv = document.getElementById('console');
-        consoleDiv.innerHTML = '';
-        let i = 0;
-        const langLines = content[currentLang].lines;
-
-        function addNextLine() {
-            if (i >= langLines.length) {
-                const final = document.createElement('div');
-                final.className = 'line';
-                final.innerHTML = `<span class="prompt">➜</span> <span class="cursor"></span>`;
-                consoleDiv.appendChild(final);
-                return;
-            }
-            
-            const lineData = langLines[i];
-            const div = document.createElement('div');
-            
-            if (lineData.t === 'input') {
-                div.className = 'line';
-                div.innerHTML = `<span class="prompt">➜</span> <span class="command">${lineData.v}</span>`;
-            } else {
-                div.className = 'output line';
-                div.innerHTML = lineData.v;
-            }
-            
-            consoleDiv.appendChild(div);
-            i++;
-            setTimeout(addNextLine, 600);
-            consoleDiv.scrollTop = consoleDiv.scrollHeight;
-        }
-        addNextLine();
-    }
-
-    setLang('en');
+    type();
 </script>
 </body>
 </html>
