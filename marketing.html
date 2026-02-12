@@ -3,77 +3,551 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matan | Digital Strategist Business Card</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Matan | Digital Growth OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #0ea5e9; --bg: #050505; --card: #111111; }
-        body { 
-            margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;
+        :root {
+            --window-bg: #f8fafc;
+            --header-bg: #e2e8f0;
+            --accent: #2563eb;
+            --tab-active: #ffffff;
+            --tab-inactive: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-light: #475569;
         }
-        .biz-card { 
-            background: var(--card); width: 100%; max-width: 400px; padding: 40px; border-radius: 25px; 
-            border: 1px solid #222; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            position: relative; overflow: hidden;
-        }
-        .biz-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
-            background: linear-gradient(90deg, var(--primary), #6366f1);
-        }
-        .avatar { 
-            width: 90px; height: 90px; background: linear-gradient(45deg, var(--primary), #6366f1); 
-            border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; 
-            font-size: 35px; font-weight: 800; font-family: 'Montserrat';
-        }
-        h1 { font-family: 'Montserrat', sans-serif; font-size: 26px; margin: 0; letter-spacing: 1px; }
-        .tagline { color: var(--primary); font-size: 13px; text-transform: uppercase; letter-spacing: 3px; margin: 10px 0 25px; font-weight: 700; }
-        
-        .bio { font-size: 14px; color: #94a3b8; line-height: 1.6; margin-bottom: 30px; text-align: center; }
-        
-        .services-list { text-align: left; background: #1a1a1a; padding: 20px; border-radius: 15px; margin-bottom: 30px; }
-        .service-item { display: flex; align-items: center; gap: 10px; font-size: 14px; margin-bottom: 10px; color: #e2e8f0; }
-        .service-item span { color: var(--primary); font-weight: bold; }
 
-        .btn { 
-            display: block; padding: 15px; margin-bottom: 12px; border-radius: 12px; 
-            text-decoration: none; font-weight: 700; transition: 0.3s; text-align: center; font-size: 15px;
+        body {
+            margin: 0;
+            font-family: 'Inter', 'Heebo', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
-        .btn-primary { background: var(--primary); color: #fff; }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3); }
-        .btn-outline { border: 1px solid #333; color: #fff; }
-        .btn-outline:hover { background: #222; }
 
-        .switch-link { margin-top: 20px; display: inline-block; font-size: 12px; color: #444; text-decoration: none; }
-        .copyright { margin-top: 30px; font-size: 0.8rem; color: #ffffff; text-align: center; font-weight: 500; }
+        .desktop-container {
+            width: 100%;
+            max-width: 1100px; /* הרחבתי קצת למסכים גדולים */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* חלון המאק */
+        .mac-window {
+            width: 95%;
+            height: 85vh;
+            max-height: 800px;
+            min-height: 550px;
+            background: var(--window-bg);
+            border-radius: 16px;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .mac-window.rtl { direction: rtl; text-align: right; }
+
+        /* כותרת הדפדפן */
+        .browser-header {
+            background: var(--header-bg);
+            padding: 8px 15px 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 42px;
+            border-bottom: 1px solid #cbd5e1;
+            flex-shrink: 0;
+        }
+        
+        .controls-area { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+        .dots { display: flex; gap: 6px; }
+        .dot { width: 11px; height: 11px; border-radius: 50%; cursor: pointer; }
+        .red { background: #ff5f56; } .yellow { background: #ffbd2e; } .green { background: #27c93f; }
+
+        .tabs-container {
+            flex-grow: 1; display: flex; align-items: flex-end; gap: 4px; padding: 0 15px;
+            overflow-x: auto; scrollbar-width: none;
+        }
+
+        .browser-tab {
+            background: var(--tab-inactive);
+            padding: 8px 15px;
+            border-radius: 8px 8px 0 0;
+            font-size: 12px;
+            color: #475569;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+            min-width: 80px; max-width: 180px;
+            transition: 0.2s; position: relative; user-select: none; white-space: nowrap;
+        }
+        .browser-tab:hover { background: #dbeafe; }
+        .browser-tab.active {
+            background: var(--window-bg); font-weight: 600; color: var(--accent);
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05); z-index: 10;
+        }
+        .tab-close { opacity: 0; font-size: 10px; margin-inline-start: 5px; transition: 0.2s; }
+        .browser-tab:hover .tab-close { opacity: 1; }
+
+        .lang-container { position: relative; margin-bottom: 6px; }
+        .globe-icon { font-size: 18px; cursor: pointer; filter: grayscale(1); transition: 0.3s; padding: 4px; }
+        .globe-icon:hover { filter: grayscale(0); transform: scale(1.1); }
+        .lang-dropdown {
+            position: absolute; top: 30px; right: 0; background: white; padding: 8px; border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: none; flex-direction: column; gap: 4px; width: 120px; z-index: 100; border: 1px solid #e2e8f0;
+        }
+        .mac-window.rtl .lang-dropdown { right: auto; left: 0; }
+        .lang-container:hover .lang-dropdown { display: flex; }
+        .lang-opt { font-size: 13px; padding: 6px; cursor: pointer; border-radius: 4px; display: flex; gap: 6px; color: #334155; }
+        .lang-opt:hover { background: #eff6ff; color: var(--accent); }
+
+        .content-area {
+            flex-grow: 1; overflow-y: auto; padding: 30px; background: var(--window-bg);
+        }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* פרופיל */
+        h1 { font-family: 'Montserrat', sans-serif; font-size: 32px; margin: 0 0 10px 0; color: var(--text-dark); letter-spacing: -1px; }
+        .badge { background: #dbeafe; color: #1e40af; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 20px; }
+        .bio { font-size: 15px; line-height: 1.7; color: var(--text-light); max-width: 850px; margin-bottom: 30px; }
+        .bio strong { color: var(--text-dark); font-weight: 600; }
+        
+        /* Grid 3x3 */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding-bottom: 20px; }
+        
+        .card { 
+            background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; 
+            cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; justify-content: center;
+        }
+        .card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1); }
+        .card-icon { font-size: 26px; margin-bottom: 10px; display: block; }
+        .card-title { font-weight: 700; font-size: 14px; color: var(--text-dark); display: flex; align-items: center; justify-content: space-between; }
+        .arrow { opacity: 0; font-size: 12px; color: var(--accent); transition: 0.2s; }
+        .card:hover .arrow { opacity: 1; }
+        .card-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+        
+        /* דף שירות */
+        .service-page { max-width: 750px; margin: 0 auto; }
+        .service-page h2 { font-size: 28px; margin-bottom: 10px; color: var(--text-dark); }
+        .service-tag { color: var(--accent); font-weight: 700; font-size: 11px; text-transform: uppercase; background: #eff6ff; display: inline-block; padding: 4px 8px; border-radius: 4px; margin-bottom: 15px; }
+        .service-desc { font-size: 15px; line-height: 1.7; color: var(--text-light); margin-bottom: 25px; }
+        .feature-list { list-style: none; padding: 0; margin-bottom: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .feature-item { display: flex; align-items: center; gap: 10px; font-size: 14px; background: white; padding: 10px; border-radius: 8px; border: 1px solid #f1f5f9; color: var(--text-dark); }
+        .check { color: var(--green); font-weight: bold; }
+        .cta-btn { background: var(--accent); color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; transition: 0.2s; display: inline-block; }
+        .cta-btn:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3); }
+
+        /* Dock */
+        .dock-container { margin-top: -35px; z-index: 100; position: relative; }
+        .dock { 
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); 
+            padding: 10px 20px; border-radius: 20px; display: flex; gap: 15px; 
+            border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
+        }
+        
+        .dock-btn { 
+            width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; 
+            transition: 0.3s; position: relative; border-radius: 12px; background: white; box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        .dock-btn:hover { transform: translateY(-15px) scale(1.15); z-index: 100; box-shadow: 0 15px 25px rgba(0,0,0,0.2); }
+        .dock-btn svg { width: 26px; height: 26px; }
+        
+        .dock-whatsapp { fill: #25D366; }
+        .dock-phone { fill: #007aff; }
+        .dock-sms { fill: #34C759; }
+        .dock-email { fill: #EA4335; }
+        .dock-dev { fill: #fff; background: #1e293b; }
+        .dock-dev svg { fill: #fff; }
+
+        .copyright { margin-top: 40px; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 500; letter-spacing: 1px; }
+
+        /* רספונסיביות */
+        @media (max-width: 768px) {
+            .mac-window { height: 85vh; }
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .bio { font-size: 13px; }
+        }
+
+        @media (max-width: 480px) {
+            .grid { grid-template-columns: 1fr; }
+            .feature-list { grid-template-columns: 1fr; }
+            .card { flex-direction: row; align-items: center; gap: 15px; padding: 12px; }
+            .card-icon { margin-bottom: 0; }
+            .dock { padding: 8px; gap: 10px; width: 90%; justify-content: space-around; }
+            .dock-btn { width: 42px; height: 42px; }
+            .dock-btn svg { width: 22px; height: 22px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="biz-card">
-        <div class="avatar">M</div>
-        <h1>MATAN</h1>
-        <div class="tagline">Digital Growth Expert</div>
-        
-        <div class="bio">
-            <b>Who am I?</b><br>
-            A Digital Marketing Consultant and Strategist. I don't just look at clicks; I look at your ROI. I specialize in data-driven marketing, precision SEO, and high-conversion strategies that turn digital traffic into actual revenue.
+    <div class="desktop-container">
+        <div class="mac-window" id="window">
+            <div class="browser-header">
+                <div class="controls-area">
+                    <div class="dots">
+                        <div class="dot red" onclick="closeAllTabs()"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                </div>
+                <div class="tabs-container" id="tabsList"></div>
+                <div class="lang-container">
+                    <div class="globe-icon">🌐</div>
+                    <div class="lang-dropdown">
+                        <div class="lang-opt" onclick="setLang('en')">🇺🇸 English</div>
+                        <div class="lang-opt" onclick="setLang('he')">🇮🇱 עברית</div>
+                        <div class="lang-opt" onclick="setLang('es')">🇪🇸 Español</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-area" id="mainContent"></div>
         </div>
 
-        <div class="services-list">
-            <div class="service-item"><span>✓</span> SEO & Organic Growth</div>
-            <div class="service-item"><span>✓</span> PPC & Paid Acquisition</div>
-            <div class="service-item"><span>✓</span> Conversion Strategy (CRO)</div>
+        <div class="dock-container">
+            <div class="dock">
+                <a href="https://wa.me/972500000000" class="dock-btn" title="WhatsApp"><svg class="dock-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
+                <a href="tel:+972500000000" class="dock-btn" title="Call"><svg class="dock-phone" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.49-5.15-3.8-6.62-6.63l1.97-1.57c.26-.29.35-.69.24-1.07-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3.25 3 3.25 3 4.13c0 9.97 8.09 18.06 18.06 18.06.88 0 1.25-.9 1.25-1.19v-3.69c0-.55-.45-.93-.3-1.93z"/></svg></a>
+                <a href="sms:+972500000000" class="dock-btn" title="SMS"><svg class="dock-sms" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></a>
+                <a href="mailto:matan230595@gmail.com" class="dock-btn" title="Email"><svg class="dock-email" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+                <a href="index.html" class="dock-btn dock-dev" title="Dev Mode"><svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg></a>
+            </div>
         </div>
-
-        <a href="https://wa.me/972500000000" class="btn btn-primary">Let's Talk Growth</a>
-        <a href="mailto:matan230595@gmail.com" class="btn btn-outline">Send an Email</a>
-        
-        <a href="index.html" class="switch-link">← Switch to Developer Identity</a>
+        <div class="copyright">© 2026 Panda Digital Agency. All Rights Reserved.</div>
     </div>
 
-    <div class="copyright">
-        © 2026 Panda Digital Agency. All Rights Reserved.
-    </div>
+    <script>
+        const data = {
+            en: {
+                home: { 
+                    tab: "Profile", title: "Hi, I'm Matan", badge: "Digital Strategist & Full Stack Dev", 
+                    bio: "I don't just build websites; I build digital assets that generate revenue. My unique advantage is the combination of <strong>Full Stack Development</strong> (the engine) and <strong>Strategic Marketing</strong> (the fuel).<br><br>While most agencies focus on vanity metrics like 'traffic', I focus on <strong>ROI, Conversion Rates, and Scalability</strong>. From custom-coded automation to pixel-perfect PPC campaigns, I provide a holistic solution for business growth.",
+                    cards: [
+                        { id: 'web', icon: '💻', title: 'Full Stack Dev', sub: 'React, Node, Next.js' },
+                        { id: 'seo', icon: '🔍', title: 'Technical SEO', sub: 'Ranking & Audits' },
+                        { id: 'ppc', icon: '🚀', title: 'PPC & Paid Ads', sub: 'Google & Meta' },
+                        { id: 'ecom', icon: '🛒', title: 'E-Commerce', sub: 'Shopify Growth' },
+                        { id: 'auto', icon: '🤖', title: 'Automation', sub: 'CRM & Integrations' },
+                        { id: 'cro', icon: '📈', title: 'CRO & Analytics', sub: 'User Behavior' },
+                        { id: 'social', icon: '📱', title: 'Social Strategy', sub: 'Brand & Content' },
+                        { id: 'funnel', icon: '🎯', title: 'Sales Funnels', sub: 'High Conversion' },
+                        { id: 'consult', icon: '💡', title: 'Consulting', sub: 'Digital Strategy' }
+                    ]
+                },
+                services: {
+                    web: {
+                        title: "Full Stack Development", tag: "Custom Code",
+                        desc: "Generic templates limit your growth. I build custom, high-performance web applications using modern technologies like React, Next.js, and Node.js. Fast, secure, and built to scale.",
+                        features: ["Custom Web Applications", "React/Next.js Architecture", "API Development & Integration", "Database Design (SQL/NoSQL)"],
+                        btn: "Build My App"
+                    },
+                    seo: { 
+                        title: "Technical SEO & Growth", tag: "Organic Dominance", 
+                        desc: "Ranking #1 is engineering, not magic. I perform deep technical audits, optimize Core Web Vitals, and implement data-driven content strategies that search engines love.",
+                        features: ["Technical Site Audits", "Schema Markup & JSON-LD", "Speed & Performance Optimization", "Competitor Gap Analysis"],
+                        btn: "Audit My Site"
+                    },
+                    ppc: { 
+                        title: "Performance Marketing (PPC)", tag: "Paid Acquisition", 
+                        desc: "Stop wasting budget. I engineer high-intent campaigns on Google and Meta using advanced tracking pixels and server-side events to target users ready to buy.",
+                        features: ["Google Search & Shopping", "Facebook/Instagram Ads", "Server-Side Tracking (CAPI)", "Retargeting Strategies"],
+                        btn: "Start Scaling"
+                    },
+                    ecom: {
+                        title: "E-Commerce Growth", tag: "Online Sales",
+                        desc: "Whether you use Shopify or WooCommerce, I optimize your store for maximum sales. From cart abandonment flows to product page optimization.",
+                        features: ["Shopify/WooCommerce Dev", "Cart Recovery Automation", "Product Page CRO", "Merchant Center Management"],
+                        btn: "Grow My Store"
+                    },
+                    auto: { 
+                        title: "Business Automation", tag: "Efficiency", 
+                        desc: "Connect your CRM, Email, and Ads into one seamless ecosystem. I build workflows that nurture leads automatically, so you never miss a sale.",
+                        features: ["Zapier/Make Integrations", "Custom Python Scripts", "Auto-Email Sequences", "CRM Architecture"],
+                        btn: "Automate Now"
+                    },
+                    cro: { 
+                        title: "Conversion Optimization", tag: "More Revenue", 
+                        desc: "Traffic is vanity, conversion is sanity. I analyze user behavior using heatmaps to remove friction points and skyrocket your sales without spending more on ads.",
+                        features: ["Heatmap Analysis", "A/B Testing", "Funnel Optimization", "User Experience (UX) Audit"],
+                        btn: "Boost Conversions"
+                    },
+                    social: { 
+                        title: "Social Media Strategy", tag: "Brand Authority", 
+                        desc: "Building a brand is about community. I create content strategies that engage your audience and build long-term trust and authority.",
+                        features: ["Content Calendar Planning", "Community Management", "Viral Content Structure", "Brand Voice Development"],
+                        btn: "Grow My Brand"
+                    },
+                    funnel: { 
+                        title: "High-Converting Funnels", tag: "Lead Gen", 
+                        desc: "I build focused landing pages and sales funnels designed with one goal: conversion. Fast loading, persuasive copy, and frictionless design.",
+                        features: ["Landing Page Development", "Lead Magnet Strategy", "Upsell/Downsell Flows", "Pixel Perfect Design"],
+                        btn: "Build My Funnel"
+                    },
+                    consult: {
+                        title: "Digital Strategy Consulting", tag: "Expert Advice",
+                        desc: "Need a roadmap? I provide strategic consulting to help businesses navigate the digital landscape, choose the right tech stack, and plan for growth.",
+                        features: ["Digital Transformation", "Tech Stack Selection", "Marketing Roadmap", "Team Training"],
+                        btn: "Book Consultation"
+                    }
+                }
+            },
+            he: {
+                home: { 
+                    tab: "פרופיל", title: "היי, אני מתן", badge: "אסטרטג דיגיטל ומפתח", 
+                    bio: "אני לא רק בונה אתרים; אני בונה נכסים דיגיטליים שמייצרים הכנסה. היתרון שלי הוא השילוב בין **פיתוח Full Stack** (המנוע) לבין **שיווק אסטרטגי** (הדלק).<br><br>בזמן שסוכנויות אחרות מתמקדות במדדי סרק כמו 'כניסות', אני מתמקד ב-**ROI, המרות וסקייל**. מאוטומציות בקוד אישי ועד קמפיינים מדויקים, אני מספק פתרון מלא לצמיחה עסקית.",
+                    cards: [
+                        { id: 'web', icon: '💻', title: 'פיתוח Full Stack', sub: 'React, Node, Next' },
+                        { id: 'seo', icon: '🔍', title: 'SEO וקידום טכני', sub: 'דירוג וסמכות' },
+                        { id: 'ppc', icon: '🚀', title: 'קמפיינים ממומנים', sub: 'גוגל וסושיאל' },
+                        { id: 'ecom', icon: '🛒', title: 'מסחר אלקטרוני', sub: 'חנויות וצמיחה' },
+                        { id: 'auto', icon: '🤖', title: 'אוטומציה עסקית', sub: 'CRM ואינטגרציות' },
+                        { id: 'cro', icon: '📈', title: 'שיפור יחסי המרה', sub: 'ניתוח התנהגות' },
+                        { id: 'social', icon: '📱', title: 'אסטרטגיית סושיאל', sub: 'מיתוג ותוכן' },
+                        { id: 'funnel', icon: '🎯', title: 'משפכי מכירה', sub: 'דפי נחיתה' },
+                        { id: 'consult', icon: '💡', title: 'ייעוץ אסטרטגי', sub: 'ליווי עסקי' }
+                    ]
+                },
+                services: {
+                    web: {
+                        title: "פיתוח אתרים Full Stack", tag: "קוד מותאם אישית",
+                        desc: "תבניות מוכנות מגבילות את הצמיחה שלך. אני בונה אפליקציות ואתרים מהירים ומאובטחים בטכנולוגיות מתקדמות (React, Node.js), מותאמים בדיוק לצרכים שלך.",
+                        features: ["פיתוח אפליקציות ובי", "ארכיטקטורת React/Next.js", "פיתוח וחיבור API", "ניהול מסדי נתונים"],
+                        btn: "בנה לי מערכת"
+                    },
+                    seo: { 
+                        title: "SEO וקידום אורגני", tag: "שליטה בתוצאות", 
+                        desc: "להגיע למקום הראשון זו הנדסה, לא קסם. אני מבצע אופטימיזציה טכנית, משפר את מהירות האתר ובונה אסטרטגיית תוכן שגוגל פשוט אוהב.",
+                        features: ["אודיט טכני לאתר", "הטמעת סכמות (Schema)", "אופטימיזציית מהירות טעינה", "מחקר מתחרים"],
+                        btn: "הזמן בדיקה לאתר"
+                    },
+                    ppc: { 
+                        title: "שיווק ממומן (PPC)", tag: "רכישת לקוחות", 
+                        desc: "תפסיק לשרוף תקציב. אני מהנדס קמפיינים בגוגל ופייסבוק עם מעקבים מתקדמים (Pixel/CAPI) שפונים לקהל שמוכן לקנות עכשיו.",
+                        features: ["Google Search & Shopping", "Facebook/Instagram Ads", "מעקב צד-שרת (Server-Side)", "אסטרטגיות רימרקטינג"],
+                        btn: "התחל לצמוח"
+                    },
+                    ecom: {
+                        title: "צמיחה למסחר אלקטרוני", tag: "מכירות אונליין",
+                        desc: "בין אם יש לך חנות ב-Shopify או WooCommerce, אני אבצע אופטימיזציה למקסימום מכירות. מנטישת עגלה ועד שיפור דף המוצר.",
+                        features: ["פיתוח שופיפיי/ווקומרס", "אוטומציית נטישת עגלה", "שיפור יחס המרה בחנות", "ניהול Google Merchant"],
+                        btn: "הגדל מכירות"
+                    },
+                    auto: { 
+                        title: "אוטומציה עסקית", tag: "יעילות מקסימלית", 
+                        desc: "חבר את ה-CRM, המייל והפרסום למערכת אחת. אני בונה תהליכים שמטפלים בלידים אוטומטית, כך שלא תפספס אף מכירה.",
+                        features: ["אינטגרציות Zapier/Make", "סקריפטים ב-Python", "סדרות אימייל אוטומטיות", "ארכיטקטורת CRM"],
+                        btn: "בנה אוטומציה"
+                    },
+                    cro: { 
+                        title: "אופטימיזציית המרה (CRO)", tag: "הגדלת הכנסות", 
+                        desc: "תנועה לא שווה כלום אם היא לא ממירה. אני מנתח התנהגות גולשים כדי להסיר חסמים ולהקפיץ את המכירות בלי להגדיל תקציב פרסום.",
+                        features: ["ניתוח מפות חום", "בדיקות A/B", "אופטימיזציית משפכים", "בדיקות חווית משתמש"],
+                        btn: "שפר המרות"
+                    },
+                    social: { 
+                        title: "אסטרטגיית סושיאל", tag: "סמכות מותג", 
+                        desc: "לבנות מותג זה לבנות קהילה. אני יוצר אסטרטגיות תוכן שיוצרות מעורבות ובונות אמון ארוך טווח עם הקהל שלך.",
+                        features: ["תכנון גאנט תוכן", "ניהול קהילות", "מבנה תוכן ויראלי", "פיתוח שפה מותגית"],
+                        btn: "חזק את המותג"
+                    },
+                    funnel: { 
+                        title: "משפכי מכירה ודפי נחיתה", tag: "לידים חמים", 
+                        desc: "אני בונה דפי נחיתה ומשפכי מכירה ממוקדי המרה. טעינה מהירה, קופירייטינג משכנע ועיצוב ללא חיכוך.",
+                        features: ["פיתוח דפי נחיתה", "אסטרטגיית Lead Magnet", "משפכי Upsell/Downsell", "עיצוב Pixel Perfect"],
+                        btn: "בנה לי משפך"
+                    },
+                    consult: {
+                        title: "ייעוץ אסטרטגי", tag: "ליווי מומחה",
+                        desc: "צריך מפה עסקית? אני מספק ייעוץ אסטרטגי כדי לעזור לעסקים לנווט בדיגיטל, לבחור את הטכנולוגיה הנכונה ולתכנן צמיחה.",
+                        features: ["טרנספורמציה דיגיטלית", "בחירת טכנולוגיות", "תוכנית עבודה שיווקית", "הדרכת צוותים"],
+                        btn: "קבע פגישת ייעוץ"
+                    }
+                }
+            },
+            es: {
+                home: { 
+                    tab: "Perfil", title: "Hola, soy Matan", badge: "Estratega Digital y Desarrollador", 
+                    bio: "No solo construyo sitios web; construyo activos digitales que generan ingresos. Mi ventaja única es la combinación de <strong>Desarrollo Full Stack</strong> (el motor) y <strong>Marketing Estratégico</strong> (el combustible).<br><br>Mientras otros adivinan, yo analizo. Desde automatización personalizada hasta campañas PPC precisas, ofrezco una solución completa para el crecimiento.",
+                    cards: [
+                        { id: 'web', icon: '💻', title: 'Full Stack Dev', sub: 'React, Node, Next' },
+                        { id: 'seo', icon: '🔍', title: 'SEO Técnico', sub: 'Ranking y Auditoría' },
+                        { id: 'ppc', icon: '🚀', title: 'PPC y Anuncios', sub: 'Google y Meta' },
+                        { id: 'ecom', icon: '🛒', title: 'E-Commerce', sub: 'Crecimiento Shopify' },
+                        { id: 'auto', icon: '🤖', title: 'Automatización', sub: 'CRM e Integración' },
+                        { id: 'cro', icon: '📈', title: 'Analítica y CRO', sub: 'Comportamiento' },
+                        { id: 'social', icon: '📱', title: 'Estrategia Social', sub: 'Marca y Contenido' },
+                        { id: 'funnel', icon: '🎯', title: 'Embudos de Venta', sub: 'Alta Conversión' },
+                        { id: 'consult', icon: '💡', title: 'Consultoría', sub: 'Estrategia Digital' }
+                    ]
+                },
+                services: {
+                    web: {
+                        title: "Desarrollo Full Stack", tag: "Código Personalizado",
+                        desc: "Las plantillas genéricas limitan tu crecimiento. Construyo aplicaciones web de alto rendimiento usando tecnologías modernas como React y Node.js.",
+                        features: ["Apps Web a Medida", "Arquitectura React/Next.js", "Desarrollo de API", "Diseño de Base de Datos"],
+                        btn: "Construir App"
+                    },
+                    seo: { 
+                        title: "SEO Técnico y Crecimiento", tag: "Dominio Orgánico", 
+                        desc: "Llegar al #1 es ingeniería. Realizo auditorías profundas, optimizo la velocidad e implemento estrategias de contenido basadas en datos.",
+                        features: ["Auditoría Técnica", "Schema Markup", "Optimización de Velocidad", "Análisis de Competencia"],
+                        btn: "Auditar mi Sitio"
+                    },
+                    ppc: { 
+                        title: "Marketing de Resultados", tag: "Adquisición", 
+                        desc: "Deja de quemar dinero. Diseño campañas en Google y Meta usando rastreo avanzado para dirigirse a usuarios listos para comprar.",
+                        features: ["Google Search & Shopping", "Anuncios Facebook", "Rastreo Server-Side", "Estrategias de Retargeting"],
+                        btn: "Escalar Ahora"
+                    },
+                    ecom: {
+                        title: "Crecimiento E-Commerce", tag: "Ventas Online",
+                        desc: "Ya sea Shopify o WooCommerce, optimizo tu tienda para máximas ventas. Desde flujos de carrito abandonado hasta optimización de productos.",
+                        features: ["Desarrollo Shopify/Woo", "Recuperación de Carrito", "CRO de Productos", "Gestión Merchant Center"],
+                        btn: "Crecer Tienda"
+                    },
+                    auto: { 
+                        title: "Automatización", tag: "Eficiencia", 
+                        desc: "Conecta CRM, Email y Anuncios. Construyo flujos que nutren leads automáticamente para que nunca pierdas una venta.",
+                        features: ["Integraciones Zapier/Make", "Scripts Python", "Secuencias de Email", "Arquitectura CRM"],
+                        btn: "Automatizar"
+                    },
+                    cro: { 
+                        title: "Optimización CRO", tag: "Más Ingresos", 
+                        desc: "El tráfico es vanidad, conversión es sanidad. Analizo comportamiento con mapas de calor para eliminar fricciones y aumentar ventas.",
+                        features: ["Mapas de Calor", "Pruebas A/B", "Optimización de Embudos", "Auditoría UX"],
+                        btn: "Mejorar Conversión"
+                    },
+                    social: { 
+                        title: "Estrategia Social", tag: "Autoridad", 
+                        desc: "Construir marca es comunidad. Creo estrategias de contenido que generan compromiso y construyen confianza a largo plazo.",
+                        features: ["Calendario de Contenido", "Gestión de Comunidad", "Estructura Viral", "Voz de Marca"],
+                        btn: "Crecer Marca"
+                    },
+                    funnel: { 
+                        title: "Embudos de Alta Conversión", tag: "Generación de Leads", 
+                        desc: "Construyo landing pages y embudos diseñados para convertir. Carga rápida, textos persuasivos y diseño sin fricción.",
+                        features: ["Desarrollo Landing Pages", "Estrategia Lead Magnet", "Flujos Upsell/Downsell", "Diseño Pixel Perfect"],
+                        btn: "Construir Embudo"
+                    },
+                    consult: {
+                        title: "Consultoría Estratégica", tag: "Consejo Experto",
+                        desc: "¿Necesitas un mapa? Ofrezco consultoría estratégica para ayudar a negocios a navegar el panorama digital y planificar su crecimiento.",
+                        features: ["Transformación Digital", "Selección de Tecnología", "Hoja de Ruta de Marketing", "Capacitación de Equipos"],
+                        btn: "Reservar Consultoría"
+                    }
+                }
+            }
+        };
 
+        let currentLang = 'en';
+        let openTabs = ['home'];
+        let activeTab = 'home';
+
+        function setLang(lang) {
+            currentLang = lang;
+            const windowEl = document.getElementById('window');
+            if (lang === 'he') windowEl.classList.add('rtl');
+            else windowEl.classList.remove('rtl');
+            renderTabs();
+            renderContent();
+        }
+
+        function openService(id) {
+            if (!openTabs.includes(id)) openTabs.push(id);
+            activeTab = id;
+            renderTabs();
+            renderContent();
+        }
+
+        function closeTab(e, id) {
+            e.stopPropagation();
+            openTabs = openTabs.filter(t => t !== id);
+            if (activeTab === id) activeTab = openTabs[openTabs.length - 1] || 'home';
+            if (openTabs.length === 0) { openTabs = ['home']; activeTab = 'home'; }
+            renderTabs();
+            renderContent();
+        }
+
+        function closeAllTabs() {
+            openTabs = ['home']; activeTab = 'home';
+            renderTabs(); renderContent();
+        }
+
+        function renderTabs() {
+            const container = document.getElementById('tabsList');
+            const langData = data[currentLang];
+            container.innerHTML = openTabs.map(id => {
+                const isHome = id === 'home';
+                const title = isHome ? langData.home.tab : langData.services[id].title.split(' ')[0];
+                const isActive = id === activeTab ? 'active' : '';
+                return `
+                    <div class="browser-tab ${isActive}" onclick="activeTab='${id}'; renderTabs(); renderContent();">
+                        ${isHome ? '🏠' : ''} ${title}
+                        ${!isHome ? `<span class="tab-close" onclick="closeTab(event, '${id}')">✕</span>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderContent() {
+            const container = document.getElementById('mainContent');
+            const langData = data[currentLang];
+            
+            container.classList.remove('fade-in');
+            void container.offsetWidth;
+            container.classList.add('fade-in');
+
+            if (activeTab === 'home') {
+                const h = langData.home;
+                container.innerHTML = `
+                    <div class="profile-header">
+                        <h1>${h.title}</h1>
+                        <span class="badge">${h.badge}</span>
+                        <div class="bio">${h.bio}</div>
+                    </div>
+                    <div class="grid">
+                        ${h.cards.map(c => `
+                            <div class="card" onclick="openService('${c.id}')">
+                                <span class="card-icon">${c.icon}</span>
+                                <div class="card-title">
+                                    ${c.title} 
+                                    <span class="arrow">${currentLang === 'he' ? '←' : '→'}</span>
+                                </div>
+                                <div class="card-sub">${c.sub}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                const s = langData.services[activeTab];
+                container.innerHTML = `
+                    <div class="service-page">
+                        <span class="service-tag">${s.tag}</span>
+                        <h2>${s.title}</h2>
+                        <div class="service-desc">${s.desc}</div>
+                        <ul class="feature-list">
+                            ${s.features.map(f => `<li class="feature-item"><span class="check">✓</span> ${f}</li>`).join('')}
+                        </ul>
+                        <a href="https://wa.me/972500000000" class="cta-btn">${s.btn}</a>
+                    </div>
+                `;
+            }
+        }
+
+        setLang('en');
+    </script>
 </body>
 </html>
