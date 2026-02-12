@@ -1,1 +1,0 @@
-# Panda-Agy-is-a.dev
