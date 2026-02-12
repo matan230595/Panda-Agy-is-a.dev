@@ -3,42 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matan | Marketing Strategist</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+    <title>Matan | Digital Strategist Business Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: #050505; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-        .card { background: #111; width: 380px; padding: 40px; border-radius: 30px; position: relative; border: 1px solid #222; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
-        .card::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg, #00f2fe, #4facfe); border-radius: 32px; z-index: -1; opacity: 0.3; }
-        .avatar { width: 80px; height: 80px; background: linear-gradient(45deg, #00f2fe, #4facfe); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 30px; }
-        h1 { margin: 0; font-size: 28px; letter-spacing: 2px; }
-        .title { color: #4facfe; font-size: 14px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px; }
-        .stats { display: flex; justify-content: space-between; margin-bottom: 30px; background: #1a1a1a; padding: 15px; border-radius: 15px; }
-        .stat-item b { display: block; font-size: 18px; color: #fff; }
-        .stat-item span { font-size: 10px; color: #666; }
-        .btn { display: block; padding: 15px; margin-bottom: 15px; border-radius: 12px; text-decoration: none; font-weight: bold; transition: 0.3s; }
-        .btn-blue { background: #4facfe; color: #000; }
-        .btn-blue:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(79, 172, 254, 0.4); }
-        .btn-dark { border: 1px solid #333; color: #fff; }
-        .btn-dark:hover { background: #222; }
-        .back { font-size: 12px; color: #444; text-decoration: none; margin-top: 20px; display: inline-block; }
+        :root { --primary: #0ea5e9; --bg: #050505; --card: #111111; }
+        body { 
+            margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;
+        }
+        .biz-card { 
+            background: var(--card); width: 100%; max-width: 400px; padding: 40px; border-radius: 25px; 
+            border: 1px solid #222; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            position: relative; overflow: hidden;
+        }
+        .biz-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--primary), #6366f1);
+        }
+        .avatar { 
+            width: 90px; height: 90px; background: linear-gradient(45deg, var(--primary), #6366f1); 
+            border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; 
+            font-size: 35px; font-weight: 800; font-family: 'Montserrat';
+        }
+        h1 { font-family: 'Montserrat', sans-serif; font-size: 26px; margin: 0; letter-spacing: 1px; }
+        .tagline { color: var(--primary); font-size: 13px; text-transform: uppercase; letter-spacing: 3px; margin: 10px 0 25px; font-weight: 700; }
+        
+        .bio { font-size: 14px; color: #94a3b8; line-height: 1.6; margin-bottom: 30px; text-align: center; }
+        
+        .services-list { text-align: left; background: #1a1a1a; padding: 20px; border-radius: 15px; margin-bottom: 30px; }
+        .service-item { display: flex; align-items: center; gap: 10px; font-size: 14px; margin-bottom: 10px; color: #e2e8f0; }
+        .service-item span { color: var(--primary); font-weight: bold; }
+
+        .btn { 
+            display: block; padding: 15px; margin-bottom: 12px; border-radius: 12px; 
+            text-decoration: none; font-weight: 700; transition: 0.3s; text-align: center; font-size: 15px;
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3); }
+        .btn-outline { border: 1px solid #333; color: #fff; }
+        .btn-outline:hover { background: #222; }
+
+        .switch-link { margin-top: 20px; display: inline-block; font-size: 12px; color: #444; text-decoration: none; }
+        .copyright { margin-top: 30px; font-size: 0.8rem; color: #ffffff; text-align: center; font-weight: 500; }
     </style>
 </head>
 <body>
-    <div class="card">
+
+    <div class="biz-card">
         <div class="avatar">M</div>
         <h1>MATAN</h1>
-        <div class="title">Growth & SEO Expert</div>
+        <div class="tagline">Digital Growth Expert</div>
         
-        <div class="stats">
-            <div class="stat-item"><b>92%</b><span>SEO Score</span></div>
-            <div class="stat-item"><b>15k+</b><span>Traffic</span></div>
-            <div class="stat-item"><b>5x</b><span>ROI</span></div>
+        <div class="bio">
+            <b>Who am I?</b><br>
+            A Digital Marketing Consultant and Strategist. I don't just look at clicks; I look at your ROI. I specialize in data-driven marketing, precision SEO, and high-conversion strategies that turn digital traffic into actual revenue.
         </div>
 
-        <a href="https://wa.me/972500000000" class="btn btn-blue">Start Growing Now</a>
-        <a href="mailto:matan230595@gmail.com" class="btn btn-dark">Get Free Audit</a>
+        <div class="services-list">
+            <div class="service-item"><span>✓</span> SEO & Organic Growth</div>
+            <div class="service-item"><span>✓</span> PPC & Paid Acquisition</div>
+            <div class="service-item"><span>✓</span> Conversion Strategy (CRO)</div>
+        </div>
+
+        <a href="https://wa.me/972500000000" class="btn btn-primary">Let's Talk Growth</a>
+        <a href="mailto:matan230595@gmail.com" class="btn btn-outline">Send an Email</a>
         
-        <a href="index.html" class="back">← Switch to Developer Terminal</a>
+        <a href="index.html" class="switch-link">← Switch to Developer Identity</a>
     </div>
+
+    <div class="copyright">
+        © 2026 Panda Digital Agency. All Rights Reserved.
+    </div>
+
 </body>
 </html>
