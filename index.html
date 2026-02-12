@@ -3,100 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matan | Dev & Marketing Portfolio</title>
+    <title>Matan | Developer Portfolio</title>
     <style>
         :root {
-            --bg: #0d1117;
-            --term-bg: #161b22;
-            --header: #21262d;
-            --text: #c9d1d9;
-            --green: #27c93f;
-            --blue: #58a6ff;
-            --border: #30363d;
+            --bg: #0d1117; --term-bg: #161b22; --header: #21262d;
+            --text: #c9d1d9; --green: #27c93f; --blue: #58a6ff; --border: #30363d;
         }
-
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            background-color: var(--bg); color: var(--text);
+            font-family: 'Courier New', monospace;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; min-height: 100vh; margin: 0; padding: 20px;
         }
-
-        /* Lang Switcher */
         .lang-switcher {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 15px;
-            background: var(--term-bg);
-            padding: 10px 25px;
-            border-radius: 30px;
-            border: 1px solid var(--border);
+            margin-bottom: 20px; display: flex; gap: 15px;
+            background: var(--term-bg); padding: 10px 25px;
+            border-radius: 30px; border: 1px solid var(--border);
         }
-        .lang-btn {
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: #8b949e;
-            transition: 0.2s;
-        }
+        .lang-btn { cursor: pointer; font-size: 0.9rem; font-weight: bold; color: #8b949e; transition: 0.2s; }
         .lang-btn:hover { color: var(--blue); }
         .lang-btn.active { color: var(--blue); border-bottom: 2px solid var(--blue); }
 
-        /* Terminal Window */
         .terminal-window {
-            background-color: var(--term-bg);
-            width: 100%;
-            max-width: 650px;
-            border-radius: 8px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.8);
-            border: 1px solid var(--border);
-            overflow: hidden;
+            background: var(--term-bg); width: 100%; max-width: 650px;
+            border-radius: 8px; border: 1px solid var(--border); overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .terminal-header {
-            background-color: var(--header);
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-        }
+        .terminal-header { background: var(--header); padding: 12px 15px; display: flex; align-items: center; }
         .buttons { display: flex; gap: 8px; }
         .btn { width: 12px; height: 12px; border-radius: 50%; }
-        .red { background-color: #ff5f56; }
-        .yellow { background-color: #ffbd2e; }
-        .green { background-color: #27c93f; }
-        .title { margin-left: 15px; color: #8b949e; font-size: 0.8rem; }
+        .terminal-body { padding: 20px; height: 380px; overflow-y: auto; text-align: left; }
         
-        .terminal-body { 
-            padding: 20px; 
-            height: 380px; 
-            overflow-y: auto; 
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-
-        .line { 
-            display: flex; 
-            margin-bottom: 10px; 
-            opacity: 0; 
-            animation: fadeIn 0.3s forwards; 
-        }
-        
+        .line { display: flex; margin-bottom: 10px; opacity: 0; animation: fadeIn 0.3s forwards; }
         .prompt { color: var(--green); font-weight: bold; margin-right: 10px; }
-        .command { color: var(--text); }
         .output { color: #8b949e; padding-left: 25px; display: block; line-height: 1.6; }
+        
+        .marketing-link { 
+            color: #fff; background: #238636; padding: 2px 8px; 
+            border-radius: 4px; text-decoration: none; font-weight: bold;
+        }
+        .marketing-link:hover { background: #2ea043; }
 
         @keyframes fadeIn { to { opacity: 1; } }
-        .cursor { display: inline-block; width: 8px; height: 16px; background-color: var(--text); animation: blink 1s infinite; vertical-align: middle; }
+        .cursor { display: inline-block; width: 8px; height: 16px; background: var(--text); animation: blink 1s infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
-
-        a { color: var(--blue); text-decoration: none; }
     </style>
 </head>
 <body>
@@ -108,8 +58,12 @@
 
     <div class="terminal-window">
         <div class="terminal-header">
-            <div class="buttons"><div class="btn red"></div><div class="btn yellow"></div><div class="btn green"></div></div>
-            <div id="term-title" class="title">matan@portfolio ~ bash</div>
+            <div class="buttons">
+                <div class="btn" style="background:#ff5f56"></div>
+                <div class="btn" style="background:#ffbd2e"></div>
+                <div class="btn" style="background:#27c93f"></div>
+            </div>
+            <div id="term-title" style="margin-left:15px; color:#8b949e; font-size:0.8rem;">matan@portfolio ~ bash</div>
         </div>
         <div class="terminal-body" id="console"></div>
     </div>
@@ -124,8 +78,7 @@
                 { t: "input", v: "ls services/" },
                 { t: "output", v: "1. Web_Development<br>2. SEO_&_Digital_Marketing" },
                 { t: "input", v: "run marketing_tool" },
-                { t: "output", v: "System: Redirecting to Growth Analyzer..." },
-                { t: "redirect" }
+                { t: "output", v: "Found: Growth Analyzer v1.0<br>Click here to launch: <a href='marketing.html' class='marketing-link'>OPEN_MARKETING_CARD</a>" }
             ]
         },
         es: {
@@ -136,8 +89,7 @@
                 { t: "input", v: "ls servicios/" },
                 { t: "output", v: "1. Desarrollo_Web<br>2. SEO_y_Marketing_Digital" },
                 { t: "input", v: "run marketing_tool" },
-                { t: "output", v: "Sistema: Redirigiendo al Analizador de Crecimiento..." },
-                { t: "redirect" }
+                { t: "output", v: "Encontrado: Analizador de Crecimiento v1.0<br>Haga clic para abrir: <a href='marketing.html' class='marketing-link'>ABRIR_TARJETA_DE_MARKETING</a>" }
             ]
         }
     };
@@ -159,7 +111,13 @@
         const langLines = content[currentLang].lines;
 
         function addNextLine() {
-            if (i >= langLines.length) return;
+            if (i >= langLines.length) {
+                const final = document.createElement('div');
+                final.className = 'line';
+                final.innerHTML = `<span class="prompt">➜</span> <span class="cursor"></span>`;
+                consoleDiv.appendChild(final);
+                return;
+            }
             
             const lineData = langLines[i];
             const div = document.createElement('div');
@@ -167,12 +125,9 @@
             if (lineData.t === 'input') {
                 div.className = 'line';
                 div.innerHTML = `<span class="prompt">➜</span> <span class="command">${lineData.v}</span>`;
-            } else if (lineData.t === 'output') {
+            } else {
                 div.className = 'output line';
                 div.innerHTML = lineData.v;
-            } else if (lineData.t === 'redirect') {
-                setTimeout(() => { window.location.href = 'marketing.html'; }, 1500);
-                return;
             }
             
             consoleDiv.appendChild(div);
