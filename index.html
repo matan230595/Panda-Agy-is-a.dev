@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matan | Terminal Portfolio</title>
+    <title>Matan | Dev Portfolio</title>
     <style>
         body {
             background-color: #0d1117;
@@ -16,17 +16,16 @@
             margin: 0;
             padding: 20px;
         }
-
         .terminal-window {
             background-color: #161b22;
             width: 100%;
-            max-width: 600px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 650px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.7);
             border: 1px solid #30363d;
             overflow: hidden;
+            font-size: 15px;
         }
-
         .terminal-header {
             background-color: #21262d;
             padding: 10px 15px;
@@ -34,141 +33,93 @@
             align-items: center;
             border-bottom: 1px solid #30363d;
         }
-
-        .buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .red { background-color: #ff5f56; }
+        .buttons { display: flex; gap: 8px; }
+        .btn { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background-color: #ff5f56; cursor: pointer; }
         .yellow { background-color: #ffbd2e; }
         .green { background-color: #27c93f; }
+        .title { margin-left: 15px; color: #8b949e; font-size: 0.8rem; }
+        .terminal-body { padding: 20px; height: 380px; overflow-y: auto; }
+        
+        .line { margin-bottom: 8px; opacity: 0; animation: fadeIn 0.3s forwards; }
+        .prompt { color: #27c93f; font-weight: bold; margin-right: 10px; }
+        .path { color: #79c0ff; margin-right: 10px; }
+        .command { color: #c9d1d9; }
+        .output { color: #8b949e; padding-left: 20px; margin-top: 5px; display: block; line-height: 1.4; }
+        .highlight { color: #e2b93d; font-weight: bold; }
+        
+        a { color: #58a6ff; text-decoration: none; border-bottom: 1px dashed #58a6ff; }
+        a:hover { border-bottom-style: solid; color: #79c0ff; }
 
-        .title {
-            margin-left: 20px;
-            font-size: 0.9rem;
-            color: #8b949e;
-        }
-
-        .terminal-body {
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .command-line {
-            display: flex;
-            margin-bottom: 10px;
-        }
-
-        .prompt {
-            color: #27c93f; /* Green */
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
-        .path {
-            color: #79c0ff; /* Blue */
-            margin-right: 10px;
-        }
-
-        .command {
-            color: #c9d1d9;
-        }
-
-        .output {
-            color: #8b949e;
-            margin-bottom: 20px;
-            padding-left: 20px; 
-            border-left: 2px solid #30363d;
-        }
-
-        .success {
-            color: #7ee787;
-        }
-
-        a {
-            color: #58a6ff;
-            text-decoration: none;
-            border-bottom: 1px dashed #58a6ff;
-        }
-
-        a:hover {
-            color: #79c0ff;
-            border-bottom-style: solid;
-        }
-
-        /* סמן מהבהב */
+        @keyframes fadeIn { to { opacity: 1; } }
+        
         .cursor {
             display: inline-block;
-            width: 8px;
-            height: 15px;
+            width: 8px; height: 16px;
             background-color: #c9d1d9;
             animation: blink 1s infinite;
             vertical-align: middle;
         }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div class="terminal-window">
-        <div class="terminal-header">
-            <div class="buttons">
-                <div class="btn red"></div>
-                <div class="btn yellow"></div>
-                <div class="btn green"></div>
-            </div>
-            <div class="title">matan@dev-portfolio ~ bash</div>
+<div class="terminal-window">
+    <div class="terminal-header">
+        <div class="buttons">
+            <div class="btn red" onclick="location.reload()" title="Restart"></div>
+            <div class="btn yellow"></div>
+            <div class="btn green"></div>
         </div>
-        
-        <div class="terminal-body">
-            <div class="command-line">
-                <span class="prompt">➜</span>
-                <span class="path">~</span>
-                <span class="command">whoami</span>
-            </div>
-            <div class="output">
-                Matan<br>
-                Full Stack Developer based in Israel. 🇮🇱
-            </div>
-
-            <div class="command-line">
-                <span class="prompt">➜</span>
-                <span class="path">~</span>
-                <span class="command">cat skills.txt</span>
-            </div>
-            <div class="output success">
-                [ "JavaScript", "React", "Node.js", "Python", "Git", "Linux" ]
-            </div>
-
-            <div class="command-line">
-                <span class="prompt">➜</span>
-                <span class="path">~</span>
-                <span class="command">./contact-me.sh</span>
-            </div>
-            <div class="output">
-                Opening connection...<br><br>
-                📂 <a href="https://github.com/matan230595" target="_blank">GitHub Profile</a><br>
-                📧 <a href="mailto:matan230595@gmail.com">Email Me</a>
-            </div>
-
-            <div class="command-line">
-                <span class="prompt">➜</span>
-                <span class="path">~</span>
-                <span class="command"><span class="cursor"></span></span>
-            </div>
-        </div>
+        <div class="title">matan @ dev-portfolio — bash</div>
     </div>
+    <div class="terminal-body" id="console"></div>
+</div>
+
+<script>
+    const consoleDiv = document.getElementById('console');
+    
+    const lines = [
+        { type: 'input', text: 'whoami' },
+        { type: 'output', text: 'Matan<br>Full Stack Developer based in Israel 🇮🇱<br>Passionate about clean code and automation.' },
+        { type: 'input', text: 'ls ./tech-stack' },
+        { type: 'output', text: '<span class="highlight">Frontend:</span> React, JavaScript (ES6+), CSS3<br><span class="highlight">Backend:</span> Node.js, Python, PostgreSQL' },
+        { type: 'input', text: 'cat projects.list' },
+        { type: 'output', text: '📂 <a href="https://github.com/matan230595" target="_blank">Terminal-Portfolio</a> - (This Website)<br>📂 <a href="#" target="_blank">E-Commerce-Backend</a> - Scalable API architecture<br>📂 <a href="#" target="_blank">Task-Manager</a> - React + Firebase productivity tool' },
+        { type: 'input', text: 'grep contact info.txt' },
+        { type: 'output', text: '📧 Email: <a href="mailto:matan230595@gmail.com">matan230595@gmail.com</a><br>🔗 GitHub: <a href="https://github.com/matan230595" target="_blank">@matan230595</a>' },
+        { type: 'final_prompt' }
+    ];
+
+    let lineIndex = 0;
+    
+    function typeLine() {
+        if (lineIndex >= lines.length) return;
+        
+        const line = lines[lineIndex];
+        const div = document.createElement('div');
+        div.className = 'line';
+        
+        if (line.type === 'input') {
+            div.innerHTML = `<span class="prompt">➜</span><span class="path">~</span> <span class="command">${line.text}</span>`;
+            consoleDiv.appendChild(div);
+            setTimeout(() => { lineIndex++; typeLine(); }, 600);
+        } else if (line.type === 'output') {
+            div.className = 'output line';
+            div.innerHTML = line.text;
+            consoleDiv.appendChild(div);
+            setTimeout(() => { lineIndex++; typeLine(); }, 800);
+        } else if (line.type === 'final_prompt') {
+             div.innerHTML = `<span class="prompt">➜</span><span class="path">~</span> <span class="cursor"></span>`;
+             consoleDiv.appendChild(div);
+             consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+        consoleDiv.scrollTop = consoleDiv.scrollHeight;
+    }
+
+    setTimeout(typeLine, 500);
+</script>
 
 </body>
 </html>
