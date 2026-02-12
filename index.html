@@ -3,58 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matan | Dev & Marketing</title>
+    <title>Matan | Dev & Marketing Portfolio</title>
     <style>
         :root {
-            --bg: #0d1117; --term-bg: #161b22; --header: #21262d;
-            --text: #c9d1d9; --green: #27c93f; --blue: #58a6ff;
+            --bg: #0d1117;
+            --term-bg: #161b22;
+            --header: #21262d;
+            --text: #c9d1d9;
+            --green: #27c93f;
+            --blue: #58a6ff;
+            --border: #30363d;
         }
+
         body {
-            background-color: var(--bg); color: var(--text);
-            font-family: 'Courier New', monospace;
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; min-height: 100vh; margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
+
+        /* Lang Switcher */
         .lang-switcher {
-            margin-bottom: 20px; display: flex; gap: 15px;
-            background: var(--term-bg); padding: 8px 20px;
-            border-radius: 20px; border: 1px solid #30363d;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            background: var(--term-bg);
+            padding: 10px 25px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
         }
-        .lang-btn { cursor: pointer; font-weight: bold; color: #8b949e; }
+        .lang-btn {
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #8b949e;
+            transition: 0.2s;
+        }
+        .lang-btn:hover { color: var(--blue); }
         .lang-btn.active { color: var(--blue); border-bottom: 2px solid var(--blue); }
-        
+
+        /* Terminal Window */
         .terminal-window {
-            background: var(--term-bg); width: 90%; max-width: 650px;
-            border-radius: 8px; border: 1px solid #30363d; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background-color: var(--term-bg);
+            width: 100%;
+            max-width: 650px;
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.8);
+            border: 1px solid var(--border);
+            overflow: hidden;
         }
-        .terminal-header { background: var(--header); padding: 10px; display: flex; align-items: center; }
+        .terminal-header {
+            background-color: var(--header);
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
         .buttons { display: flex; gap: 8px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .terminal-body { padding: 20px; height: 350px; overflow-y: auto; text-align: left; }
-        .line { margin-bottom: 10px; opacity: 0; animation: fadeIn 0.3s forwards; }
+        .btn { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background-color: #ff5f56; }
+        .yellow { background-color: #ffbd2e; }
+        .green { background-color: #27c93f; }
+        .title { margin-left: 15px; color: #8b949e; font-size: 0.8rem; }
+        
+        .terminal-body { 
+            padding: 20px; 
+            height: 380px; 
+            overflow-y: auto; 
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .line { 
+            display: flex; 
+            margin-bottom: 10px; 
+            opacity: 0; 
+            animation: fadeIn 0.3s forwards; 
+        }
+        
         .prompt { color: var(--green); font-weight: bold; margin-right: 10px; }
-        .output { color: #8b949e; padding-left: 20px; display: block; line-height: 1.5; }
+        .command { color: var(--text); }
+        .output { color: #8b949e; padding-left: 25px; display: block; line-height: 1.6; }
+
         @keyframes fadeIn { to { opacity: 1; } }
-        .cursor { display: inline-block; width: 8px; height: 16px; background: var(--text); animation: blink 1s infinite; }
+        .cursor { display: inline-block; width: 8px; height: 16px; background-color: var(--text); animation: blink 1s infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
+
         a { color: var(--blue); text-decoration: none; }
     </style>
 </head>
 <body>
+
     <div class="lang-switcher">
-        <span class="lang-btn active" onclick="setLang('en')" id="btn-en">US</span>
-        <span class="lang-btn" onclick="setLang('es')" id="btn-es">ES</span>
+        <div class="lang-btn active" onclick="setLang('en')" id="btn-en">ENGLISH (US)</div>
+        <div class="lang-btn" onclick="setLang('es')" id="btn-es">ESPAÑOL (ES)</div>
     </div>
 
     <div class="terminal-window">
         <div class="terminal-header">
-            <div class="buttons">
-                <div class="dot" style="background:#ff5f56"></div>
-                <div class="dot" style="background:#ffbd2e"></div>
-                <div class="dot" style="background:#27c93f"></div>
-            </div>
-            <div id="title" style="margin-left:15px; font-size:0.8rem; color:#8b949e">matan@portfolio ~</div>
+            <div class="buttons"><div class="btn red"></div><div class="btn yellow"></div><div class="btn green"></div></div>
+            <div id="term-title" class="title">matan@portfolio ~ bash</div>
         </div>
         <div class="terminal-body" id="console"></div>
     </div>
@@ -62,56 +117,73 @@
 <script>
     const content = {
         en: {
+            title: "matan@portfolio ~ bash",
             lines: [
                 { t: "input", v: "whoami" },
-                { t: "output", v: "Matan - Full Stack Developer." },
+                { t: "output", v: "Matan - Full Stack Developer & Digital Marketer." },
                 { t: "input", v: "ls services/" },
-                { t: "output", v: "1. Web Development<br>2. SEO & Digital Marketing" },
+                { t: "output", v: "1. Web_Development<br>2. SEO_&_Digital_Marketing" },
                 { t: "input", v: "run marketing_tool" },
-                { t: "output", v: "Redirecting to Growth Dashboard..." },
+                { t: "output", v: "System: Redirecting to Growth Analyzer..." },
                 { t: "redirect" }
             ]
         },
         es: {
+            title: "matan@portafolio ~ bash",
             lines: [
                 { t: "input", v: "quien_soy" },
-                { t: "output", v: "Matan - Desarrollador Full Stack." },
+                { t: "output", v: "Matan - Desarrollador Full Stack y Experto en Marketing." },
                 { t: "input", v: "ls servicios/" },
-                { t: "output", v: "1. Desarrollo Web<br>2. SEO y Marketing Digital" },
+                { t: "output", v: "1. Desarrollo_Web<br>2. SEO_y_Marketing_Digital" },
                 { t: "input", v: "run marketing_tool" },
-                { t: "output", v: "Redirigiendo al panel de marketing..." },
+                { t: "output", v: "Sistema: Redirigiendo al Analizador de Crecimiento..." },
                 { t: "redirect" }
             ]
         }
     };
 
     let currentLang = 'en';
-    function setLang(l) { 
-        currentLang = l; 
+
+    function setLang(lang) {
+        currentLang = lang;
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-'+l).classList.add('active');
-        render(); 
+        document.getElementById('btn-' + lang).classList.add('active');
+        document.getElementById('term-title').innerText = content[lang].title;
+        renderTerminal();
     }
 
-    function render() {
-        const div = document.getElementById('console');
-        div.innerHTML = '';
+    function renderTerminal() {
+        const consoleDiv = document.getElementById('console');
+        consoleDiv.innerHTML = '';
         let i = 0;
-        function add() {
-            if (i >= content[currentLang].lines.length) return;
-            const line = content[currentLang].lines[i];
-            const lDiv = document.createElement('div');
-            lDiv.className = 'line';
-            if (line.t === 'input') lDiv.innerHTML = `<span class="prompt">➜</span><span>${line.v}</span>`;
-            else if (line.t === 'output') lDiv.innerHTML = `<span class="output">${line.v}</span>`;
-            else if (line.t === 'redirect') { setTimeout(() => window.location.href = 'marketing.html', 1500); return; }
-            div.appendChild(lDiv); i++;
-            setTimeout(add, 600);
-            div.scrollTop = div.scrollHeight;
+        const langLines = content[currentLang].lines;
+
+        function addNextLine() {
+            if (i >= langLines.length) return;
+            
+            const lineData = langLines[i];
+            const div = document.createElement('div');
+            
+            if (lineData.t === 'input') {
+                div.className = 'line';
+                div.innerHTML = `<span class="prompt">➜</span> <span class="command">${lineData.v}</span>`;
+            } else if (lineData.t === 'output') {
+                div.className = 'output line';
+                div.innerHTML = lineData.v;
+            } else if (lineData.t === 'redirect') {
+                setTimeout(() => { window.location.href = 'marketing.html'; }, 1500);
+                return;
+            }
+            
+            consoleDiv.appendChild(div);
+            i++;
+            setTimeout(addNextLine, 600);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
         }
-        add();
+        addNextLine();
     }
-    render();
+
+    setLang('en');
 </script>
 </body>
 </html>
