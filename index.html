@@ -17,24 +17,26 @@
             margin: 0;
             padding: 20px;
         }
-        /* תפריט שפות */
         .lang-switcher {
             margin-bottom: 15px;
             display: flex;
-            gap: 15px;
+            gap: 20px;
             background: #161b22;
-            padding: 10px 20px;
+            padding: 10px 25px;
             border-radius: 30px;
             border: 1px solid #30363d;
         }
         .lang-btn {
             cursor: pointer;
-            font-size: 1.2rem;
-            transition: transform 0.2s;
-            filter: grayscale(40%);
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #8b949e;
+            transition: 0.2s;
+            text-transform: uppercase;
+            padding-bottom: 2px;
         }
-        .lang-btn:hover { transform: scale(1.2); filter: grayscale(0%); }
-        .lang-btn.active { filter: grayscale(0%); border-bottom: 2px solid #38bdf8; }
+        .lang-btn:hover { color: #38bdf8; }
+        .lang-btn.active { color: #38bdf8; border-bottom: 2px solid #38bdf8; }
 
         .terminal-window {
             background-color: #161b22;
@@ -47,7 +49,7 @@
         }
         .terminal-header {
             background-color: #21262d;
-            padding: 10px 15px;
+            padding: 12px 15px;
             display: flex;
             align-items: center;
             border-bottom: 1px solid #30363d;
@@ -58,30 +60,43 @@
         .yellow { background-color: #ffbd2e; }
         .green { background-color: #27c93f; }
         .title { margin-left: 15px; color: #8b949e; font-size: 0.8rem; }
-        .terminal-body { padding: 20px; height: 380px; overflow-y: auto; text-align: left; }
         
-        /* תמיכה בעברית */
-        .rtl { direction: rtl; text-align: right; font-family: 'Arial', sans-serif; }
+        .terminal-body { 
+            padding: 20px; 
+            height: 400px; 
+            overflow-y: auto; 
+            text-align: left; 
+            display: flex;
+            flex-direction: column;
+        }
         
-        .line { margin-bottom: 10px; opacity: 0; animation: fadeIn 0.3s forwards; }
+        /* תיקון עברית */
+        .rtl { direction: rtl; text-align: right; }
+        .rtl .prompt { margin-left: 10px; margin-right: 0; }
+        .rtl .output { padding-right: 20px; padding-left: 0; }
+        
+        /* שמירה על אנגלית (כמו אימייל) משמאל לימין גם בתוך עברית */
+        .ltr-fix { direction: ltr; display: inline-block; }
+
+        .line { margin-bottom: 12px; opacity: 0; animation: fadeIn 0.3s forwards; }
         .prompt { color: #27c93f; font-weight: bold; margin-right: 10px; }
         .command { color: #c9d1d9; }
-        .output { color: #8b949e; padding: 5px 20px; display: block; line-height: 1.6; }
+        .output { color: #8b949e; padding-left: 20px; display: block; line-height: 1.6; }
         
         a { color: #58a6ff; text-decoration: none; }
         a:hover { text-decoration: underline; }
 
         @keyframes fadeIn { to { opacity: 1; } }
-        .cursor { display: inline-block; width: 8px; height: 16px; background-color: #c9d1d9; animation: blink 1s infinite; }
+        .cursor { display: inline-block; width: 8px; height: 16px; background-color: #c9d1d9; animation: blink 1s infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
     <div class="lang-switcher">
-        <span class="lang-btn active" onclick="setLang('en')" title="English">🇺🇸</span>
-        <span class="lang-btn" onclick="setLang('he')" title="עברית">🇮🇱</span>
-        <span class="lang-btn" onclick="setLang('es')" title="Español">🇪🇸</span>
+        <span class="lang-btn" onclick="setLang('en')" id="btn-en">US</span>
+        <span class="lang-btn active" onclick="setLang('he')" id="btn-he">IL</span>
+        <span class="lang-btn" onclick="setLang('es')" id="btn-es">ES</span>
     </div>
 
     <div class="terminal-window">
@@ -102,7 +117,7 @@
                 { t: "input", v: "ls languages/" },
                 { t: "output", v: "🇺🇸 English (Fluent)<br>🇮🇱 Hebrew (Native)<br>🇪🇸 Spanish (Learning)" },
                 { t: "input", v: "cat contact.txt" },
-                { t: "output", v: "Email: <a href='mailto:matan230595@gmail.com'>matan230595@gmail.com</a>" }
+                { t: "output", v: "Email: <span class='ltr-fix'>matan230595@gmail.com</span>" }
             ]
         },
         he: {
@@ -113,31 +128,29 @@
                 { t: "input", v: "ls שפות/" },
                 { t: "output", v: "🇮🇱 עברית (שפת אם)<br>🇺🇸 אנגלית (רמה גבוהה)<br>🇪🇸 ספרדית (בלמידה)" },
                 { t: "input", v: "cat צור_קשר.txt" },
-                { t: "output", v: "אימייל: <a href='mailto:matan230595@gmail.com'>matan230595@gmail.com</a>" }
+                { t: "output", v: "אימייל: <span class='ltr-fix'>matan230595@gmail.com</span>" }
             ]
         },
         es: {
             title: "matan@portafolio ~ bash",
             lines: [
                 { t: "input", v: "quien_soy" },
-                { t: "output", v: "Matan - Desarrollador Full Stack.<br>Creo aplicaciones web limpias y funcיונales." },
+                { t: "output", v: "Matan - Desarrollador Full Stack.<br>Creo aplicaciones web limpias y funcionales." },
                 { t: "input", v: "ls idiomas/" },
                 { t: "output", v: "🇪🇸 Español (Aprendiendo)<br>🇺🇸 Inglés (Fluido)<br>🇮🇱 Hebreo (Nativo)" },
                 { t: "input", v: "cat contacto.txt" },
-                { t: "output", v: "Correo: <a href='mailto:matan230595@gmail.com'>matan230595@gmail.com</a>" }
+                { t: "output", v: "Correo: <span class='ltr-fix'>matan230595@gmail.com</span>" }
             ]
         }
     };
 
-    let currentLang = 'en';
+    let currentLang = 'he'; // ברירת מחדל עברית כדי שתראה את התיקון
 
     function setLang(lang) {
         currentLang = lang;
-        // עדכון כפתורים
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
+        document.getElementById('btn-' + lang).classList.add('active');
         
-        // עדכון כיוון טקסט לעברית
         const consoleDiv = document.getElementById('console');
         if(lang === 'he') consoleDiv.classList.add('rtl');
         else consoleDiv.classList.remove('rtl');
@@ -153,7 +166,7 @@
         const langLines = content[currentLang].lines;
 
         function addNextLine() {
-            if ( i >= langLines.length) {
+            if (i >= langLines.length) {
                 const final = document.createElement('div');
                 final.className = 'line';
                 final.innerHTML = `<span class="prompt">➜</span> <span class="cursor"></span>`;
@@ -174,14 +187,13 @@
             
             consoleDiv.appendChild(div);
             i++;
-            setTimeout(addNextLine, 500);
+            setTimeout(addNextLine, 400);
             consoleDiv.scrollTop = consoleDiv.scrollHeight;
         }
         addNextLine();
     }
 
-    // הפעלה ראשונית
-    renderTerminal();
+    setLang('he');
 </script>
 </body>
 </html>
