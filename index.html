@@ -3,62 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matan | Software Solutions</title>
+    <title>Matan | Developer Environment</title>
     <style>
-        :root { --bg: #0d1117; --term: #161b22; --text: #c9d1d9; --green: #238636; --blue: #58a6ff; }
+        :root { 
+            --bg: #0d1117; 
+            --term: #161b22; 
+            --text: #c9d1d9; 
+            --green: #238636; 
+            --blue: #58a6ff; 
+        }
         body { 
             background: var(--bg); 
             color: var(--text); 
             font-family: 'Courier New', monospace; 
             display: flex; 
-            flex-direction: column;
+            flex-direction: column; 
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
             margin: 0; 
             padding: 20px; 
-            box-sizing: border-box; 
+            box-sizing: border-box;
         }
         .terminal { 
             background: var(--term); 
             width: 100%; 
-            max-width: 750px; 
+            max-width: 800px; 
             border-radius: 12px; 
             border: 1px solid #30363d; 
             overflow: hidden; 
             box-shadow: 0 25px 50px rgba(0,0,0,0.6); 
         }
-        .header { background: #21262d; padding: 12px; display: flex; gap: 8px; align-items: center; }
+        .header { 
+            background: #21262d; 
+            padding: 12px; 
+            display: flex; 
+            gap: 8px; 
+            align-items: center; 
+        }
         .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .body { padding: 25px; height: 500px; overflow-y: auto; scroll-behavior: smooth; }
+        .body { 
+            padding: 25px; 
+            height: 550px; 
+            overflow-y: auto; 
+            scroll-behavior: smooth;
+        }
         .line { margin-bottom: 12px; opacity: 0; animation: fadeIn 0.3s forwards; }
         .prompt { color: var(--green); font-weight: bold; margin-right: 10px; }
         .output { color: #8b949e; padding-left: 25px; line-height: 1.6; display: block; }
+        
         a { color: var(--blue); text-decoration: none; border-bottom: 1px dashed var(--blue); }
         a:hover { border-bottom-style: solid; }
-        
-        .nav-btn { 
-            display: inline-block;
-            margin-top: 10px;
-            margin-right: 10px;
+
+        .btn { 
+            display: inline-block; 
+            margin-top: 10px; 
+            margin-right: 10px; 
             background: var(--green); 
             color: white !important; 
-            padding: 6px 15px; 
-            border-radius: 4px; 
+            padding: 8px 16px; 
+            border-radius: 6px; 
             font-weight: bold; 
             text-decoration: none !important;
-            border: none !important;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
         }
-        .nav-btn.blue { background: #0070f3; }
-        .nav-btn:hover { filter: brightness(1.1); transform: scale(1.02); }
+        .btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .btn-blue { background: #0070f3; }
+        .btn-purple { background: #6366f1; }
 
         .copyright { 
-            margin-top: 25px; 
-            font-size: 0.85rem; 
-            color: #ffffff; /* לבן בוהק כפי שביקשת */
-            text-align: center;
+            margin-top: 30px; 
+            font-size: 0.9rem; 
+            color: #ffffff; 
+            text-align: center; 
+            font-weight: bold;
             letter-spacing: 1px;
-            font-weight: 500;
         }
 
         @keyframes fadeIn { to { opacity: 1; } }
@@ -67,12 +88,13 @@
     </style>
 </head>
 <body>
+
     <div class="terminal">
         <div class="header">
             <div class="dot" style="background:#ff5f56"></div>
             <div class="dot" style="background:#ffbd2e"></div>
             <div class="dot" style="background:#27c93f"></div>
-            <span style="margin-left:15px; font-size:13px; color:#8b949e">matan@dev-environment: ~ /portfolio</span>
+            <span style="margin-left:15px; font-size:13px; color:#8b949e">matan@dev-environment: ~ /main</span>
         </div>
         <div class="body" id="console"></div>
     </div>
@@ -85,12 +107,16 @@
     const content = [
         { t: "input", v: "whoami" },
         { t: "output", v: "<b>Matan</b><br>Full Stack Developer & Technical Architect.<br>I specialize in building high-performance web applications, scalable API systems, and automated digital solutions. Passionate about clean code, open source, and turning complex problems into elegant user experiences." },
-        { t: "input", v: "ls ./tech-stack" },
-        { t: "output", v: "• <b>Frontend:</b> React.js, Next.js, TypeScript, Tailwind CSS<br>• <b>Backend:</b> Node.js, Express, Python (Django/FastAPI)<br>• <b>Infrastructure:</b> AWS, Docker, Git, CI/CD" },
+        { t: "input", v: "contact --list" },
+        { t: "output", v: "• Email: <a href='mailto:matan230595@gmail.com'>matan230595@gmail.com</a><br>• GitHub: <a href='https://github.com/matan230595' target='_blank'>@matan230595</a><br>• LinkedIn: <a href='#' target='_blank'>Matan Profile</a>" },
+        { t: "input", v: "call --direct" },
+        { t: "output", v: "Establishing secure voice line...<br><a href='tel:+972500000000' class='btn btn-blue'>MAKE A CALL NOW</a>" },
+        { t: "input", v: "whatsapp --send" },
+        { t: "output", v: "Redirecting to WhatsApp API...<br><a href='https://wa.me/972500000000' class='btn'>SEND A MESSAGE</a>" },
         { t: "input", v: "run portfolio" },
-        { t: "output", v: "Accessing projects database... Found active portfolio:<br><br><a href='#' class='nav-btn blue'>GOTO: MY_PORTFOLIO</a>" },
-        { t: "input", v: "run marketing_mode" },
-        { t: "output", v: "Switching identity... System found 1 related business card:<br><br><a href='marketing.html' class='nav-btn'>GOTO: MARKETING_&_SEO_CARD</a>" },
+        { t: "output", v: "Fetching developer projects...<br><a href='#' class='btn btn-blue'>OPEN PORTFOLIO</a>" },
+        { t: "input", v: "run marketing_tool" },
+        { t: "output", v: "Switching to Marketing Identity...<br><a href='marketing.html' class='btn btn-purple'>GOTO: MARKETING BUSINESS CARD</a>" },
         { t: "final" }
     ];
 
@@ -102,9 +128,16 @@
         const line = content[i];
         const div = document.createElement('div');
         div.className = 'line';
-        if (line.t === "input") div.innerHTML = `<span class="prompt">➜</span> <span>${line.v}</span>`;
-        else if (line.t === "output") { div.className = "output line"; div.innerHTML = line.v; }
-        else if (line.t === "final") div.innerHTML = `<span class="prompt">➜</span> <span class="cursor"></span>`;
+        
+        if (line.t === "input") {
+            div.innerHTML = `<span class="prompt">➜</span> <span>${line.v}</span>`;
+        } else if (line.t === "output") {
+            div.className = "output line";
+            div.innerHTML = line.v;
+        } else if (line.t === "final") {
+            div.innerHTML = `<span class="prompt">➜</span> <span class="cursor"></span>`;
+        }
+
         consoleDiv.appendChild(div);
         i++;
         setTimeout(type, 700);
@@ -112,5 +145,6 @@
     }
     setTimeout(type, 500);
 </script>
+
 </body>
 </html>
