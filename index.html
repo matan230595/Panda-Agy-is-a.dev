@@ -3,20 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matan | Full Stack Developer</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Matan | Terminal Portfolio</title>
     <style>
-        :root {
-            --primary: #3b82f6;
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --text: #f8fafc;
-            --text-secondary: #94a3b8;
-        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,103 +16,157 @@
             margin: 0;
             padding: 20px;
         }
-        .container {
-            background-color: var(--card-bg);
-            padding: 3rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            max-width: 450px;
+
+        .terminal-window {
+            background-color: #161b22;
             width: 100%;
-            text-align: center;
-            border: 1px solid #334155;
-        }
-        .avatar {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: white;
-        }
-        h1 { margin: 0; font-size: 2rem; }
-        h2 { 
-            color: var(--primary); 
-            font-size: 1.1rem; 
-            margin-top: 0.5rem; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        p { color: var(--text-secondary); line-height: 1.6; }
-        
-        .skills-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 2rem 0;
-        }
-        .skill-tag {
-            background: rgba(59, 130, 246, 0.1);
-            color: #60a5fa;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #30363d;
+            overflow: hidden;
         }
 
-        .links {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 2rem;
-        }
-        .btn {
-            background-color: #334155;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: 0.3s;
+        .terminal-header {
+            background-color: #21262d;
+            padding: 10px 15px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            border-bottom: 1px solid #30363d;
         }
-        .btn:hover { background-color: var(--primary); transform: translateY(-2px); }
-        .btn.primary { background-color: var(--primary); }
-        .btn.primary:hover { background-color: #2563eb; }
+
+        .buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .red { background-color: #ff5f56; }
+        .yellow { background-color: #ffbd2e; }
+        .green { background-color: #27c93f; }
+
+        .title {
+            margin-left: 20px;
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .command-line {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .prompt {
+            color: #27c93f; /* Green */
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .path {
+            color: #79c0ff; /* Blue */
+            margin-right: 10px;
+        }
+
+        .command {
+            color: #c9d1d9;
+        }
+
+        .output {
+            color: #8b949e;
+            margin-bottom: 20px;
+            padding-left: 20px; 
+            border-left: 2px solid #30363d;
+        }
+
+        .success {
+            color: #7ee787;
+        }
+
+        a {
+            color: #58a6ff;
+            text-decoration: none;
+            border-bottom: 1px dashed #58a6ff;
+        }
+
+        a:hover {
+            color: #79c0ff;
+            border-bottom-style: solid;
+        }
+
+        /* סמן מהבהב */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: #c9d1d9;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="avatar">M</div>
-        <h1>Matan</h1>
-        <h2>Full Stack Developer</h2>
-        <p>
-            Passionate about building scalable web applications and open source software.
-        </p>
-
-        <div class="skills-container">
-            <span class="skill-tag">JavaScript</span>
-            <span class="skill-tag">React</span>
-            <span class="skill-tag">Node.js</span>
-            <span class="skill-tag">Python</span>
-            <span class="skill-tag">Git</span>
+    <div class="terminal-window">
+        <div class="terminal-header">
+            <div class="buttons">
+                <div class="btn red"></div>
+                <div class="btn yellow"></div>
+                <div class="btn green"></div>
+            </div>
+            <div class="title">matan@dev-portfolio ~ bash</div>
         </div>
+        
+        <div class="terminal-body">
+            <div class="command-line">
+                <span class="prompt">➜</span>
+                <span class="path">~</span>
+                <span class="command">whoami</span>
+            </div>
+            <div class="output">
+                Matan<br>
+                Full Stack Developer based in Israel. 🇮🇱
+            </div>
 
-        <div class="links">
-            <a href="https://github.com/matan230595" class="btn primary">
-                <i class="fab fa-github"></i> GitHub Profile
-            </a>
-            <a href="mailto:contact@example.com" class="btn">
-                <i class="fas fa-envelope"></i> Contact Me
-            </a>
+            <div class="command-line">
+                <span class="prompt">➜</span>
+                <span class="path">~</span>
+                <span class="command">cat skills.txt</span>
+            </div>
+            <div class="output success">
+                [ "JavaScript", "React", "Node.js", "Python", "Git", "Linux" ]
+            </div>
+
+            <div class="command-line">
+                <span class="prompt">➜</span>
+                <span class="path">~</span>
+                <span class="command">./contact-me.sh</span>
+            </div>
+            <div class="output">
+                Opening connection...<br><br>
+                📂 <a href="https://github.com/matan230595" target="_blank">GitHub Profile</a><br>
+                📧 <a href="mailto:matan230595@gmail.com">Email Me</a>
+            </div>
+
+            <div class="command-line">
+                <span class="prompt">➜</span>
+                <span class="path">~</span>
+                <span class="command"><span class="cursor"></span></span>
+            </div>
         </div>
     </div>
 
