@@ -3,132 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matan | Multi-Lang Portfolio</title>
+    <title>Matan | Dev & Marketing</title>
     <style>
         :root {
-            --bg: #0d1117;
-            --terminal-bg: #161b22;
-            --header-bg: #21262d;
-            --text: #c9d1d9;
-            --green: #27c93f;
-            --blue: #58a6ff;
-            --border: #30363d;
+            --bg: #0d1117; --term-bg: #161b22; --header: #21262d;
+            --text: #c9d1d9; --green: #27c93f; --blue: #58a6ff;
         }
-
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            background-color: var(--bg); color: var(--text);
+            font-family: 'Courier New', monospace;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; min-height: 100vh; margin: 0;
         }
-
-        /* Lang Switcher */
         .lang-switcher {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 15px;
-            background: var(--terminal-bg);
-            padding: 10px 25px;
-            border-radius: 30px;
-            border: 1px solid var(--border);
+            margin-bottom: 20px; display: flex; gap: 15px;
+            background: var(--term-bg); padding: 8px 20px;
+            border-radius: 20px; border: 1px solid #30363d;
         }
-        .lang-btn {
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: #8b949e;
-            transition: 0.2s;
-        }
-        .lang-btn:hover { color: var(--blue); }
+        .lang-btn { cursor: pointer; font-weight: bold; color: #8b949e; }
         .lang-btn.active { color: var(--blue); border-bottom: 2px solid var(--blue); }
-
-        /* Terminal Window */
+        
         .terminal-window {
-            background-color: var(--terminal-bg);
-            width: 100%;
-            max-width: 650px;
-            border-radius: 8px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.8);
-            border: 1px solid var(--border);
-            overflow: hidden;
+            background: var(--term-bg); width: 90%; max-width: 650px;
+            border-radius: 8px; border: 1px solid #30363d; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .terminal-header {
-            background-color: var(--header-bg);
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-        }
+        .terminal-header { background: var(--header); padding: 10px; display: flex; align-items: center; }
         .buttons { display: flex; gap: 8px; }
-        .btn { width: 12px; height: 12px; border-radius: 50%; }
-        .red { background-color: #ff5f56; }
-        .yellow { background-color: #ffbd2e; }
-        .green { background-color: #27c93f; }
-        .title { margin-left: 15px; color: #8b949e; font-size: 0.8rem; }
-        
-        .terminal-body { 
-            padding: 20px; 
-            height: 400px; 
-            overflow-y: auto; 
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Line & RTL Handling */
-        .line { 
-            display: flex; 
-            flex-direction: row;
-            align-items: flex-start; 
-            margin-bottom: 10px; 
-            opacity: 0; 
-            animation: fadeIn 0.3s forwards; 
-        }
-        .rtl .line { flex-direction: row-reverse; }
-        
-        .prompt { color: var(--green); font-weight: bold; min-width: 25px; }
-        .rtl .prompt { text-align: right; margin-left: 10px; }
-
-        .command-wrapper { flex-grow: 1; text-align: left; }
-        .rtl .command-wrapper { text-align: right; }
-
-        .output { 
-            color: #8b949e; 
-            display: block; 
-            line-height: 1.6; 
-            width: 100%;
-            padding-left: 25px;
-            box-sizing: border-box;
-        }
-        .rtl .output { text-align: right; padding-left: 0; padding-right: 25px; }
-
-        .ltr-fix { direction: ltr; display: inline-block; }
-
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .terminal-body { padding: 20px; height: 350px; overflow-y: auto; text-align: left; }
+        .line { margin-bottom: 10px; opacity: 0; animation: fadeIn 0.3s forwards; }
+        .prompt { color: var(--green); font-weight: bold; margin-right: 10px; }
+        .output { color: #8b949e; padding-left: 20px; display: block; line-height: 1.5; }
         @keyframes fadeIn { to { opacity: 1; } }
-        .cursor { display: inline-block; width: 8px; height: 16px; background-color: var(--text); animation: blink 1s infinite; vertical-align: middle; }
+        .cursor { display: inline-block; width: 8px; height: 16px; background: var(--text); animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-
         a { color: var(--blue); text-decoration: none; }
-        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-
     <div class="lang-switcher">
-        <div class="lang-btn" onclick="setLang('en')" id="btn-en">US</div>
-        <div class="lang-btn active" onclick="setLang('he')" id="btn-he">IL</div>
-        <div class="lang-btn" onclick="setLang('es')" id="btn-es">ES</div>
+        <span class="lang-btn active" onclick="setLang('en')" id="btn-en">US</span>
+        <span class="lang-btn" onclick="setLang('es')" id="btn-es">ES</span>
     </div>
 
     <div class="terminal-window">
         <div class="terminal-header">
-            <div class="buttons"><div class="btn red"></div><div class="btn yellow"></div><div class="btn green"></div></div>
-            <div id="term-title" class="title">matan@portfolio ~ bash</div>
+            <div class="buttons">
+                <div class="dot" style="background:#ff5f56"></div>
+                <div class="dot" style="background:#ffbd2e"></div>
+                <div class="dot" style="background:#27c93f"></div>
+            </div>
+            <div id="title" style="margin-left:15px; font-size:0.8rem; color:#8b949e">matan@portfolio ~</div>
         </div>
         <div class="terminal-body" id="console"></div>
     </div>
@@ -136,91 +62,56 @@
 <script>
     const content = {
         en: {
-            title: "matan@portfolio ~ bash",
             lines: [
                 { t: "input", v: "whoami" },
-                { t: "output", v: "Matan - Full Stack Developer.<br>I build clean and functional web apps." },
-                { t: "input", v: "ls languages/" },
-                { t: "output", v: "🇺🇸 English (Fluent)<br>🇮🇱 Hebrew (Native)<br>🇪🇸 Spanish (Learning)" },
-                { t: "input", v: "cat contact.txt" },
-                { t: "output", v: "Email: <span class='ltr-fix'>matan230595@gmail.com</span>" }
-            ]
-        },
-        he: {
-            title: "מתן@פורטפוליו ~ bash",
-            lines: [
-                { t: "input", v: "מי_אני" },
-                { t: "output", v: "מתן - מפתח Full Stack.<br>בונה אפליקציות אינטרנט נקיות וחכמות." },
-                { t: "input", v: "ls שפות/" },
-                { t: "output", v: "🇮🇱 עברית (שפת אם)<br>🇺🇸 אנגלית (רמה גבוהה)<br>🇪🇸 ספרדית (בלמידה)" },
-                { t: "input", v: "cat צור_קשר.txt" },
-                { t: "output", v: "אימייל: <span class='ltr-fix'>matan230595@gmail.com</span>" }
+                { t: "output", v: "Matan - Full Stack Developer." },
+                { t: "input", v: "ls services/" },
+                { t: "output", v: "1. Web Development<br>2. SEO & Digital Marketing" },
+                { t: "input", v: "run marketing_tool" },
+                { t: "output", v: "Redirecting to Growth Dashboard..." },
+                { t: "redirect" }
             ]
         },
         es: {
-            title: "matan@portafolio ~ bash",
             lines: [
                 { t: "input", v: "quien_soy" },
-                { t: "output", v: "Matan - Desarrollador Full Stack.<br>Diseño y programo aplicaciones web modernas." },
-                { t: "input", v: "ls idiomas/" },
-                { t: "output", v: "🇪🇸 Español (Aprendiendo)<br>🇺🇸 Inglés (Fluido)<br>🇮🇱 Hebreo (Nativo)" },
-                { t: "input", v: "cat contacto.txt" },
-                { t: "output", v: "Correo: <span class='ltr-fix'>matan230595@gmail.com</span>" }
+                { t: "output", v: "Matan - Desarrollador Full Stack." },
+                { t: "input", v: "ls servicios/" },
+                { t: "output", v: "1. Desarrollo Web<br>2. SEO y Marketing Digital" },
+                { t: "input", v: "run marketing_tool" },
+                { t: "output", v: "Redirigiendo al panel de marketing..." },
+                { t: "redirect" }
             ]
         }
     };
 
-    let currentLang = 'he';
-
-    function setLang(lang) {
-        currentLang = lang;
+    let currentLang = 'en';
+    function setLang(l) { 
+        currentLang = l; 
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + lang).classList.add('active');
-        
-        const consoleDiv = document.getElementById('console');
-        if(lang === 'he') consoleDiv.classList.add('rtl');
-        else consoleDiv.classList.remove('rtl');
-        
-        document.getElementById('term-title').innerText = content[lang].title;
-        renderTerminal();
+        document.getElementById('btn-'+l).classList.add('active');
+        render(); 
     }
 
-    function renderTerminal() {
-        const consoleDiv = document.getElementById('console');
-        consoleDiv.innerHTML = '';
+    function render() {
+        const div = document.getElementById('console');
+        div.innerHTML = '';
         let i = 0;
-        const langLines = content[currentLang].lines;
-
-        function addNextLine() {
-            if (i >= langLines.length) {
-                const final = document.createElement('div');
-                final.className = 'line';
-                final.innerHTML = `<span class="prompt">➜</span><div class="command-wrapper"><span class="cursor"></span></div>`;
-                consoleDiv.appendChild(final);
-                return;
-            }
-            
-            const lineData = langLines[i];
-            const div = document.createElement('div');
-            div.className = 'line';
-            
-            if (lineData.t === 'input') {
-                div.innerHTML = `<span class="prompt">➜</span><div class="command-wrapper"><span class="command">${lineData.v}</span></div>`;
-            } else {
-                div.className = 'line'; // Output uses the same flex line
-                div.innerHTML = `<div class="output">${lineData.v}</div>`;
-            }
-            
-            consoleDiv.appendChild(div);
-            i++;
-            setTimeout(addNextLine, 500);
-            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        function add() {
+            if (i >= content[currentLang].lines.length) return;
+            const line = content[currentLang].lines[i];
+            const lDiv = document.createElement('div');
+            lDiv.className = 'line';
+            if (line.t === 'input') lDiv.innerHTML = `<span class="prompt">➜</span><span>${line.v}</span>`;
+            else if (line.t === 'output') lDiv.innerHTML = `<span class="output">${line.v}</span>`;
+            else if (line.t === 'redirect') { setTimeout(() => window.location.href = 'marketing.html', 1500); return; }
+            div.appendChild(lDiv); i++;
+            setTimeout(add, 600);
+            div.scrollTop = div.scrollHeight;
         }
-        addNextLine();
+        add();
     }
-
-    // Start with Hebrew
-    setLang('he');
+    render();
 </script>
 </body>
 </html>
