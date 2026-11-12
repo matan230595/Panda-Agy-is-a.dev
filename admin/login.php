@@ -1,7 +1,12 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/common.php';start_admin();
-if(!empty($_SESSION['authenticated'])){header('Location: index.php',true,303);exit;}
+if(!empty($_SESSION['authenticated'])) {
+ if(time()-(int)($_SESSION['last']??0)<=1800) {
+  $_SESSION['last']=time();header('Location: index.php',true,303);exit;
+ }
+ $_SESSION=[];session_regenerate_id(true);
+}
 $wrong=false;
 if($_SERVER['REQUEST_METHOD']==='POST'){
  if(!hash_equals(token(),(string)($_POST['csrf']??''))){http_response_code(403);exit('Invalid request');}
