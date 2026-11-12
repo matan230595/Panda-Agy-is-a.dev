@@ -1,0 +1,61 @@
+name: Stage bc.panda-il.com site files (no production changes)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm required source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in index.html marketing.html config.js; do test -f "$path" || { echo "::error::Missing $path"; exit 1; }; done
+          grep -q 'config.js' index.html
+          grep -q 'config.js' marketing.html
+          echo "Public site source validated"
+      - name: Prepare restricted staging package
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p stage
+          cp index.html marketing.html config.js stage/
+          # admin.html contains client-side hardcoded password: never stage it publicly.
+          printf '%s\n' 'Admin panel withheld pending server-side authentication.' > stage/ADMIN_SECURITY_NOTICE.txt
+          echo "Public pages staged; admin.html intentionally excluded"
+      - name: Set up SSH
+        shell: bash
+        env:
+          HOST: ${{ secrets.VPS1_HOST }}
+          SSH_USER: ${{ secrets.VPS1_USER }}
+          SSH_KEY_B64: ${{ secrets.VPS1_SSH_KEY_B64 }}
+          KNOWN: ${{ secrets.VPS1_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$HOST" && test -n "$SSH_USER" && test -n "$SSH_KEY_B64" && test -n "$KNOWN"
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s' "$SSH_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+          ssh-keygen -y -P '' -f ~/.ssh/id_ed25519 >/dev/null
+      - name: Upload files into dedicated staging directory
+        shell: bash
+        env:
+          HOST: ${{ secrets.VPS1_HOST }}
+          SSH_USER: ${{ secrets.VPS1_USER }}
+        run: |
+          set -euo pipefail
+          SSH_OPTS="-i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o BatchMode=yes -o ConnectTimeout=12"
+          ssh $SSH_OPTS "$SSH_USER@$HOST" 'mkdir -p "$HOME/bc-site-staging" && chmod 700 "$HOME/bc-site-staging"'
+          scp $SSH_OPTS stage/index.html stage/marketing.html stage/config.js stage/ADMIN_SECURITY_NOTICE.txt "$SSH_USER@$HOST:bc-site-staging/"
+          ssh $SSH_OPTS "$SSH_USER@$HOST" 'cd "$HOME/bc-site-staging" && sha256sum index.html marketing.html config.js && test ! -e admin.html'
+          echo "RESULT: STAGING_READY"
+      - name: Remove private key
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519
