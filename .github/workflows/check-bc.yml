@@ -11,33 +11,41 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Require SSH connection settings
+      - name: Validate connection settings
         env:
           HOST: ${{ secrets.VPS1_HOST }}
-          USER: ${{ secrets.VPS1_USER }}
-          KEY: ${{ secrets.VPS1_SSH_KEY }}
+          SSH_USER: ${{ secrets.VPS1_USER }}
+          SSH_KEY_B64: ${{ secrets.VPS1_SSH_KEY_B64 }}
           KNOWN: ${{ secrets.VPS1_KNOWN_HOSTS }}
         run: |
-          test -n "$HOST" && test -n "$USER" && test -n "$KEY" && test -n "$KNOWN" || {
-            echo "Missing VPS1_HOST / VPS1_USER / VPS1_SSH_KEY / VPS1_KNOWN_HOSTS secret"
+          if [[ -z "$HOST" || -z "$SSH_USER" || -z "$SSH_KEY_B64" || -z "$KNOWN" ]]; then
+            echo "::error::Missing VPS1_HOST, VPS1_USER, VPS1_SSH_KEY_B64, or VPS1_KNOWN_HOSTS"
             exit 1
-          }
-      - name: Configure SSH securely
+          fi
+      - name: Configure and validate SSH key
         env:
-          KEY: ${{ secrets.VPS1_SSH_KEY }}
+          SSH_KEY_B64: ${{ secrets.VPS1_SSH_KEY_B64 }}
           KNOWN: ${{ secrets.VPS1_KNOWN_HOSTS }}
         run: |
           umask 077
           mkdir -p ~/.ssh
-          printf '%s\n' "$KEY" > ~/.ssh/id_ed25519
+          if ! printf '%s' "$SSH_KEY_B64" | base64 --decode > ~/.ssh/id_ed25519; then
+            echo "::error::SSH key secret is not valid base64"
+            exit 1
+          fi
           printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+          if ! ssh-keygen -y -P '' -f ~/.ssh/id_ed25519 >/dev/null 2>&1; then
+            echo "::error::Decoded SSH private key is invalid or encrypted; check VPS1_SSH_KEY_B64"
+            exit 1
+          fi
+          echo "SSH key format validated"
       - name: Inspect hostname reservation (no changes)
         env:
           HOST: ${{ secrets.VPS1_HOST }}
-          USER: ${{ secrets.VPS1_USER }}
+          SSH_USER: ${{ secrets.VPS1_USER }}
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=12 -o ConnectionAttempts=1 "$USER@$HOST" 'sh -s' <<'REMOTE'
+          ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=12 -o ConnectionAttempts=1 "$SSH_USER@$HOST" 'sh -s' <<'REMOTE'
           echo "=== Server ==="
           hostname
           echo "=== Web directory matches ==="
