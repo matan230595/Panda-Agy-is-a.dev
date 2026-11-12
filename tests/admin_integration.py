@@ -26,7 +26,8 @@ with tempfile.TemporaryDirectory(prefix="bc-admin-test-") as td:
     assert old in source and old2 in source
     source=source.replace(old,"const AUTH_DIR="+json.dumps(str(private))+";")
     source=source.replace(old2,"const SITE_CONFIG="+json.dumps(str(config))+";")
-    # HTTP loopback fixture only; production common.php remains Secure-cookie HTTPS-only.\n    source=source.replace("'secure'=>true", "'secure'=>false")\n    common.write_text(source)
+    # HTTP loopback fixture only; production common.php remains Secure-cookie HTTPS-only.
+    source=source.replace("'secure'=>true", "'secure'=>false")\n    common.write_text(source)
     password=secrets.token_urlsafe(25)
     hashed=subprocess.check_output(["php","-r","echo password_hash($argv[1], PASSWORD_DEFAULT);",password],text=True).strip()
     (private/"password.hash").write_text(hashed)
@@ -37,7 +38,7 @@ with tempfile.TemporaryDirectory(prefix="bc-admin-test-") as td:
     def request(path, data=None, headers=None):
         nonlocal_placeholder=None
         h=dict(headers or {})
-        if cookie:h["Cookie"]=cookie
+
         req=urllib.request.Request(base+path,data=data,headers=h,method="POST" if data is not None else "GET")
         try:
             resp=opener.open(req,timeout=5)
@@ -59,14 +60,14 @@ with tempfile.TemporaryDirectory(prefix="bc-admin-test-") as td:
         match=re.search(r'name="csrf" value="([a-f0-9]+)"',body)
         assert match,"CSRF token missing"
         csrf=match.group(1)
-        cookie=h["Set-Cookie"].split(";",1)[0]
+
         wrong=urllib.parse.urlencode({"csrf":csrf,"password":"incorrect"}).encode()
         status,_,_=request("/admin/login.php",wrong,{"Content-Type":"application/x-www-form-urlencoded"})
         assert status==200,("invalid login",status)
         good=urllib.parse.urlencode({"csrf":csrf,"password":password}).encode()
         status,h,_=request("/admin/login.php",good,{"Content-Type":"application/x-www-form-urlencoded"})
         assert status in (200,303),("valid login",status)
-        if "Set-Cookie" in h:cookie=h["Set-Cookie"].split(";",1)[0]
+
         status,_,body=request("/admin/api.php")
         assert status==200,("authenticated API",status,body)
         info=json.loads(body)
