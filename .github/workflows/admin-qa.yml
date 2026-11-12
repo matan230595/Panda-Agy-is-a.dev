@@ -36,7 +36,7 @@ jobs:
           assert 'password_verify' in Path('admin/login.php').read_text()
           assert 'flock(' in api and 'rename(' in api
           assert "secure'=>true" in common
-          js = re.findall(r'<script(?:\\s[^>]*)?>([\\s\\S]*?)</script>', admin, re.I)
+          js = re.findall(r'<script>([\s\S]*?)</script>', admin, re.I)
           assert js
           for n, snippet in enumerate(js):
               if snippet.strip():Path(f'/tmp/admin-inline-{n}.js').write_text(snippet)
