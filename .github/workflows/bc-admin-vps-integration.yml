@@ -1,0 +1,64 @@
+name: BC Admin - VPS1 isolated integration test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  vps1-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 4f97ef2edeb16e68b1a15a5c522bf2567e42fda3
+      - name: Confirm local source validity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s tests/admin_integration.py
+          python3 -m py_compile tests/admin_integration.py
+          for file in admin/*.php; do php -l "$file"; done
+      - name: Set up verified SSH
+        shell: bash
+        env:
+          HOST: ${{ secrets.VPS1_HOST }}
+          SSH_USER: ${{ secrets.VPS1_USER }}
+          SSH_KEY_B64: ${{ secrets.VPS1_SSH_KEY_B64 }}
+          KNOWN: ${{ secrets.VPS1_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$HOST" && test -n "$SSH_USER" && test -n "$SSH_KEY_B64" && test -n "$KNOWN"
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s' "$SSH_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+          ssh-keygen -y -P '' -f ~/.ssh/id_ed25519 >/dev/null
+      - name: Transfer isolated fixture to SSH user's private home
+        shell: bash
+        env:
+          HOST: ${{ secrets.VPS1_HOST }}
+          SSH_USER: ${{ secrets.VPS1_USER }}
+        run: |
+          set -euo pipefail
+          SSH="ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o BatchMode=yes -o ConnectTimeout=12"
+          SCP="scp -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o BatchMode=yes -o ConnectTimeout=12"
+          $SSH "$SSH_USER@$HOST" 'set -eu; umask 077; mkdir -p "$HOME/bc-admin-integration-test/admin" "$HOME/bc-admin-integration-test/tests"; chmod 700 "$HOME/bc-admin-integration-test"'
+          $SCP admin/*.php "$SSH_USER@$HOST:bc-admin-integration-test/admin/"
+          $SCP tests/admin_integration.py "$SSH_USER@$HOST:bc-admin-integration-test/tests/"
+          $SSH "$SSH_USER@$HOST" 'sh -se' <<'REMOTE'
+          set -eu
+          cd "$HOME/bc-admin-integration-test"
+          umask 077
+          echo "=== Private integration check ==="
+          python3 -m py_compile tests/admin_integration.py
+          for file in admin/*.php; do php -l "$file"; done
+          python3 tests/admin_integration.py
+          echo "RESULT: VPS1_ISOLATED_INTEGRATION_PASS"
+          REMOTE
+      - name: Remove SSH private key
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519
