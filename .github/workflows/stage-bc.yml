@@ -20,6 +20,33 @@ jobs:
           grep -q 'config.js' index.html
           grep -q 'config.js' marketing.html
           echo "Public site source validated"
+      - name: JavaScript and navigation quality gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check config.js
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          for name in ('index.html', 'marketing.html', 'admin.html'):
+              html = Path(name).read_text()
+              scripts = re.findall(r'<script(?:\\s[^>]*)?>([\\s\\S]*?)</script>', html, flags=re.I)
+              for i, script in enumerate(scripts):
+                  if script.strip():
+                      Path(f'/tmp/{name}-{i}.js').write_text(script)
+          m = Path('marketing.html').read_text()
+          a = Path('admin.html').read_text()
+          assert 'openTab(${JSON.stringify(t)})' in m, 'Marketing tab type fix missing'
+          assert 'function switchTab(id, button)' in a, 'Admin handler fix missing'
+          assert 'event.target.classList' not in a, 'Unsafe global event usage remains'
+          assert 'config.js' in m and 'config.js' in Path('index.html').read_text()
+          print('RESULT: SOURCE_ASSERTIONS_OK')
+          PY
+          for script in /tmp/index.html-*.js /tmp/marketing.html-*.js /tmp/admin.html-*.js; do
+            [ -f "$script" ] || continue
+            node --check "$script"
+          done
+          echo "RESULT: JAVASCRIPT_SYNTAX_OK"
       - name: Prepare restricted staging package
         shell: bash
         run: |
