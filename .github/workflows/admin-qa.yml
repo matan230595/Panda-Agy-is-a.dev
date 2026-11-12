@@ -47,3 +47,8 @@ jobs:
             node --check "$file"
           done
           echo "RESULT: PHP_AND_JS_SYNTAX_OK"
+      - name: Isolated PHP integration test
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/admin_integration.py
