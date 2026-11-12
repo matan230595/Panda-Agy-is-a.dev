@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-const AUTH_DIR='/home/matanadmin/.panda-bc-admin';
+const AUTH_DIR='/home/matanadmin/web/bc.panda-il.com/private/.panda-bc-admin';
 const SITE_CONFIG='/home/matanadmin/web/bc.panda-il.com/public_html/config.js';
 function start_admin():void {
  ini_set('session.use_strict_mode','1');ini_set('session.use_only_cookies','1');
