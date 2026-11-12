@@ -2,326 +2,84 @@
 declare(strict_types=1);
 require __DIR__.'/common.php';
 start_admin();
-if(empty($_SESSION['authenticated']) || time() - (int)($_SESSION['last'] ?? 0) > 1800){
- header('Location: login.php', true, 303); exit;
+if(empty($_SESSION['authenticated']) || time()-(int)($_SESSION['last']??0)>1800){
+ header('Location: login.php',true,303);exit;
 }
-$_SESSION['last'] = time();
+$_SESSION['last']=time();
 token();
 ?>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מערכת ניהול פנדה | Panda Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
-    <script src="../config.js"></script>
-    <style>
-        :root {
-            --bg: #0f172a; --panel: #1e293b; --border: #334155; --text: #e2e8f0;
-            --accent: #3b82f6; --success: #10b981; --danger: #ef4444;
-        }
-
-        body { background: var(--bg); color: var(--text); font-family: 'Heebo', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 100px; }
-        
-        /* Login */
-        #login { position: fixed; inset: 0; background: #020617; display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 999; }
-        .login-box { text-align: center; background: var(--panel); padding: 40px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); max-width: 400px; width: 90%; }
-        
-        /* Inputs */
-        input, textarea { background: #0f172a; border: 1px solid var(--border); color: white; padding: 10px; width: 100%; margin-top: 5px; border-radius: 6px; font-family: sans-serif; box-sizing: border-box; }
-        input:focus, textarea:focus { border-color: var(--accent); outline: none; }
-
-        /* Layout */
-        .container { width: 100%; max-width: 1000px; padding: 20px; display: none; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
-        
-        /* Tabs */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-        .tab-btn { background: var(--panel); color: #94a3b8; border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; white-space: nowrap; }
-        .tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-
-        .group { background: var(--panel); padding: 25px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border); }
-        .group h3 { margin-top: 0; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        label { color: #94a3b8; font-size: 13px; font-weight: bold; display: block; margin-top: 15px; }
-
-        /* Buttons */
-        .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
-
-        /* Service Editor Cards */
-        .service-card { background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 15px; display: grid; grid-template-columns: 50px 1fr 1fr; gap: 15px; align-items: start; position: relative; }
-        .service-card .full-width { grid-column: span 3; }
-        .service-header { grid-column: span 3; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 10px; font-weight: bold; color: var(--accent); }
-        .del-srv-btn { position: absolute; top: 10px; left: 10px; background: #ef4444; color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; font-size: 12px; }
-
-        /* Save Bar */
-        .save-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--panel); padding: 15px; border-top: 1px solid var(--border); display: flex; justify-content: center; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); z-index: 100; }
-        .save-btn { background: var(--success); color: white; font-size: 18px; padding: 12px 40px; width: 100%; max-width: 300px; }
-
-        /* Upload Button styling */
-        .file-upload-btn { background: #475569; margin-top: 20px; width: 100%; color: white; padding: 10px; border-radius: 8px; cursor: pointer; display: block; }
-        .hidden-file { display: none; }
-
-        @media (max-width: 700px) {
-            .service-card { grid-template-columns: 1fr; }
-            .service-card .full-width { grid-column: span 1; }
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>BC Admin v2 | Control Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/admin-v2.css?v=2">
+<script src="../config.js"></script>
+<script src="assets/admin-v2.js?v=2" defer></script>
 </head>
 <body>
-
-    <div class="container" id="ui">
-        <header>
-            <h1>🐼 הגדרות פנדה</h1>
-            <form method="post" action="logout.php"><input type="hidden" name="csrf" value="<?=htmlspecialchars(token(), ENT_QUOTES)?>"><button class="btn" style="background:#334155; font-size:12px;" type="submit">התנתק</button></form>
-        </header>
-
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('contact', this)">📞 פרטי קשר</button>
-            <button class="tab-btn" onclick="switchTab('terminal', this)">💻 טרמינל</button>
-            <button class="tab-btn" onclick="switchTab('marketing_he', this)">🇮🇱 שיווק (עברית)</button>
-            <button class="tab-btn" onclick="switchTab('marketing_en', this)">🇺🇸 שיווק (אנגלית)</button>
-            <button class="tab-btn" onclick="switchTab('marketing_es', this)">🇪🇸 שיווק (ספרדית)</button>
-        </div>
-
-        <div id="contact" class="tab-content active">
-            <div class="group">
-                <h3>פרטי קשר גלובליים</h3>
-                <label>טלפון (פורמט בינלאומי ללא +)</label><input id="c_phone" dir="ltr">
-                <label>וואטסאפ</label><input id="c_wa" dir="ltr">
-                <label>אימייל</label><input id="c_email" dir="ltr">
-                <label>גיטהאב</label><input id="c_git" dir="ltr">
-            </div>
-        </div>
-
-        <div id="terminal" class="tab-content">
-            <div class="group">
-                <h3>פרופיל</h3>
-                <label>User</label><input id="t_user" dir="ltr">
-                <label>Bio (HTML)</label><textarea id="t_bio" rows="3" dir="ltr"></textarea>
-                <label>Skills</label><textarea id="t_skills" rows="4" dir="ltr"></textarea>
-            </div>
-            <div class="group">
-                <h3>⚡ פקודות מותאמות</h3>
-                <div id="cmd_list"></div>
-                <button class="btn btn-primary" onclick="addCmd()">+ הוסף פקודה</button>
-            </div>
-        </div>
-
-        <div id="marketing_he" class="tab-content">
-            <div class="group">
-                <h3>כללי (עברית)</h3>
-                <label>כותרת</label><input id="he_title">
-                <label>ביו</label><textarea id="he_bio" rows="3"></textarea>
-            </div>
-            <div class="group">
-                <h3>🛠️ ניהול שירותים (עברית)</h3>
-                <div id="services_he"></div>
-                <button class="btn btn-primary" onclick="addService('he')">+ הוסף שירות</button>
-            </div>
-        </div>
-
-        <div id="marketing_en" class="tab-content">
-            <div class="group">
-                <h3>General (English)</h3>
-                <label>Title</label><input id="en_title" dir="ltr">
-                <label>Bio</label><textarea id="en_bio" rows="3" dir="ltr"></textarea>
-            </div>
-            <div class="group">
-                <h3>🛠️ Services (English)</h3>
-                <div id="services_en"></div>
-                <button class="btn btn-primary" onclick="addService('en')">+ Add Service</button>
-            </div>
-        </div>
-
-        <div id="marketing_es" class="tab-content">
-            <div class="group">
-                <h3>General (Español)</h3>
-                <label>Título</label><input id="es_title" dir="ltr">
-                <label>Bio</label><textarea id="es_bio" rows="3" dir="ltr"></textarea>
-            </div>
-            <div class="group">
-                <h3>🛠️ Servicios (Español)</h3>
-                <div id="services_es"></div>
-                <button class="btn btn-primary" onclick="addService('es')">+ Añadir Servicio</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="save-bar" id="saveBar" style="display:none;">
-        <button class="btn save-btn" onclick="save()">💾 שמור שינויים באתר</button>
-    </div>
-
-<script>
-    let commands = [];
-    let services = { he: [], en: [], es: [] };
-
-    let revision = '';
-    let csrfToken = '';
-    async function initializeAdmin() {
-        if (!window.SITE_DATA) {
-            alert('קובץ הנתונים של האתר אינו זמין');
-            return;
-        }
-        try {
-            const response = await fetch('api.php', {credentials:'same-origin',cache:'no-store'});
-            if (response.status === 401) { location.href = 'login.php'; return; }
-            if (!response.ok) throw new Error('API unavailable (' + response.status + ')');
-            const result = await response.json();
-            revision = result.revision;
-            csrfToken = result.csrf;
-            document.getElementById('ui').style.display = 'block';
-            document.getElementById('saveBar').style.display = 'flex';
-            loadData();
-        } catch (err) {
-            alert('לא ניתן לטעון את ממשק הניהול: ' + err.message);
-        }
-    }
-
-    function switchTab(id, button) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        if (button) button.classList.add('active');
-    }
-
-    function loadData() {
-        const d = window.SITE_DATA;
-        
-        // הגנה מפני שדות חסרים
-        d.contact = d.contact || {};
-        d.terminal = d.terminal || {};
-        d.marketing = d.marketing || { he:{services:[]}, en:{services:[]}, es:{services:[]} };
-
-        // Contact
-        document.getElementById('c_phone').value = d.contact.phone || '';
-        document.getElementById('c_wa').value = d.contact.whatsapp || '';
-        document.getElementById('c_email').value = d.contact.email || '';
-        document.getElementById('c_git').value = d.contact.github || '';
-
-        // Terminal
-        document.getElementById('t_user').value = d.terminal.user || '';
-        document.getElementById('t_bio').value = d.terminal.bio || '';
-        document.getElementById('t_skills').value = d.terminal.skills || '';
-        commands = d.terminal.commands || [];
-        renderCmds();
-
-        // Marketing
-        ['he', 'en', 'es'].forEach(lang => {
-            if(!d.marketing[lang]) d.marketing[lang] = { title:'', bio:'', services:[] };
-            document.getElementById(`${lang}_title`).value = d.marketing[lang].title || '';
-            document.getElementById(`${lang}_bio`).value = d.marketing[lang].bio || '';
-            services[lang] = d.marketing[lang].services || [];
-            renderServices(lang);
-        });
-    }
-
-    // Commands
-    function renderCmds() {
-        const list = document.getElementById('cmd_list');
-        list.innerHTML = '';
-        commands.forEach((cmd, i) => {
-            const div = document.createElement('div');
-            div.className = 'cmd-item';
-            div.style.cssText = "display:flex; gap:10px; background:#0f172a; padding:10px; margin-bottom:10px; border-radius:5px; align-items:center;";
-            div.innerHTML = `
-                <div style="flex-grow:1; display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-                    <input value="${cmd.trigger}" onchange="updCmd(${i},'trigger',this.value)" dir="ltr">
-                    <input value="${cmd.btn}" onchange="updCmd(${i},'btn',this.value)" dir="ltr">
-                    <input value="${cmd.output}" onchange="updCmd(${i},'output',this.value)" dir="ltr" style="grid-column:span 2">
-                    <input value="${cmd.url}" onchange="updCmd(${i},'url',this.value)" dir="ltr" style="grid-column:span 2">
-                </div>
-                <button class="btn btn-danger" onclick="delCmd(${i})">X</button>
-            `;
-            list.appendChild(div);
-        });
-    }
-    function addCmd() { commands.push({trigger:"new", btn:"LINK", output:"Desc", url:"#"}); renderCmds(); }
-    function delCmd(i) { commands.splice(i,1); renderCmds(); }
-    function updCmd(i,k,v) { commands[i][k] = v; }
-
-    // Services
-    function renderServices(lang) {
-        const container = document.getElementById(`services_${lang}`);
-        container.innerHTML = '';
-        services[lang].forEach((srv, i) => {
-            const div = document.createElement('div');
-            div.className = 'service-card';
-            const featuresStr = Array.isArray(srv.features) ? srv.features.join(', ') : srv.features;
-            
-            div.innerHTML = `
-                <div class="service-header">
-                    <span>שירות #${i+1}</span>
-                    <button class="del-srv-btn" onclick="delService('${lang}', ${i})">מחק</button>
-                </div>
-                <div><label>אייקון</label><input value="${srv.icon || '🚀'}" onchange="updSrv('${lang}', ${i}, 'icon', this.value)" style="text-align:center; font-size:20px;"></div>
-                <div><label>כותרת</label><input value="${srv.title || ''}" onchange="updSrv('${lang}', ${i}, 'title', this.value)"></div>
-                <div class="full-width"><label>תיאור</label><input value="${srv.desc || ''}" onchange="updSrv('${lang}', ${i}, 'desc', this.value)"></div>
-                <div class="full-width"><label>פיצ'רים (מופרד בפסיקים)</label><textarea rows="2" onchange="updSrvFeatures('${lang}', ${i}, this.value)">${featuresStr}</textarea></div>
-                <div><label>טקסט כפתור</label><input value="${srv.btn || ''}" onchange="updSrv('${lang}', ${i}, 'btn', this.value)"></div>
-            `;
-            container.appendChild(div);
-        });
-    }
-    function addService(lang) { services[lang].push({icon:"🆕", title:"New Service", desc:"...", features:[], btn:"More"}); renderServices(lang); }
-    function delService(lang, i) { if(confirm('למחוק?')) { services[lang].splice(i, 1); renderServices(lang); } }
-    function updSrv(lang, i, k, v) { services[lang][i][k] = v; }
-    function updSrvFeatures(lang, i, v) { services[lang][i].features = v.split(',').map(s=>s.trim()).filter(s=>s); }
-
-    async function save() {
-        const d = window.SITE_DATA;
-        d.contact = { 
-            phone: document.getElementById('c_phone').value,
-            email: document.getElementById('c_email').value,
-            whatsapp: document.getElementById('c_wa').value,
-            github: document.getElementById('c_git').value
-        };
-        d.terminal = {
-            user: document.getElementById('t_user').value,
-            bio: document.getElementById('t_bio').value,
-            skills: document.getElementById('t_skills').value,
-            commands: commands
-        };
-        ['he', 'en', 'es'].forEach(lang => {
-            d.marketing[lang].title = document.getElementById(`${lang}_title`).value;
-            d.marketing[lang].bio = document.getElementById(`${lang}_bio`).value;
-            d.marketing[lang].services = services[lang];
-        });
-
-        const button = document.querySelector('.save-btn');
-        button.disabled = true;
-        const oldLabel = button.textContent;
-        button.textContent = 'שומר...';
-        try {
-            const response = await fetch('api.php', {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: {'Content-Type':'application/json','X-CSRF-Token':csrfToken},
-                body: JSON.stringify({data:d,revision})
-            });
-            const result = await response.json();
-            if (!response.ok) {
-                if (response.status === 409) throw new Error('הנתונים השתנו בשרת. רענן את הדף לפני שמירה חוזרת.');
-                if (response.status === 401) { location.href = 'login.php'; return; }
-                throw new Error(result.error || 'שמירה נכשלה');
-            }
-            revision = result.revision;
-            alert('השינויים נשמרו באתר בהצלחה, עם גיבוי לגרסה הקודמת.');
-        } catch (error) {
-            alert('שגיאה בשמירה: ' + error.message);
-        } finally {
-            button.disabled = false;
-            button.textContent = oldLabel;
-        }
-    }
-    initializeAdmin();
-</script>
+<div class="shell">
+<aside class="sidebar" id="sidebar" aria-label="ניווט מנהל">
+ <a class="identity" href="#overview" aria-label="BC מרכז בקרה">
+  <span class="monogram">BC<span class="gold">.</span></span>
+  <span><strong>CONTROL CENTER</strong><small>ADMINISTRATION / V2</small></span>
+ </a>
+ <div class="nav-label">WORKSPACE</div>
+ <nav id="nav">
+  <button type="button" class="nav-link active" data-screen="overview"><span class="nav-symbol">◈</span><span>סקירה כללית</span></button>
+  <button type="button" class="nav-link" data-screen="contact"><span class="nav-symbol">⌁</span><span>פרטי קשר</span></button>
+  <button type="button" class="nav-link" data-screen="terminal"><span class="nav-symbol">⌘</span><span>פרופיל וטרמינל</span></button>
+  <button type="button" class="nav-link" data-screen="marketing"><span class="nav-symbol">▤</span><span>Marketing OS</span></button>
+  <button type="button" class="nav-link" data-screen="operations"><span class="nav-symbol">◇</span><span>מערכת וגרסאות</span></button>
+ </nav>
+ <div class="side-bottom"><span class="live-dot"></span><span>PRIVATE ADMIN AREA</span><small>bc.panda-il.com</small></div>
+</aside>
+<div class="main-wrap">
+<header class="topbar">
+ <div class="top-left"><button class="icon-btn menu-toggle" type="button" id="menuToggle" aria-label="פתיחת ניווט">☰</button><span class="crumb">BC <span>/</span> <strong id="currentCrumb">סקירה כללית</strong></span></div>
+ <div class="top-actions"><span class="environment"><span class="live-dot"></span>PRODUCTION</span><a href="../" target="_blank" rel="noopener noreferrer" class="btn ghost compact">↗ האתר</a><a href="../marketing.html" target="_blank" rel="noopener noreferrer" class="btn ghost compact">↗ שיווק</a><form method="post" action="logout.php" id="logoutForm"><input type="hidden" name="csrf" value="<?=htmlspecialchars(token(),ENT_QUOTES)?>"><button class="btn ghost compact" type="submit">התנתק</button></form></div>
+</header>
+<main class="content" id="workspace">
+ <div class="intro"><p class="eyebrow" id="eyebrow">EXECUTIVE WORKSPACE</p><h1 id="screenTitle">סקירה כללית</h1><p class="lede" id="screenDesc">תמונת מצב והגישה המהירה לניהול הנוכחות הדיגיטלית.</p></div>
+ <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
+ <section class="screen active" id="overview" aria-labelledby="screenTitle">
+  <div class="metrics"><article class="metric"><span>DOMAIN</span><strong>bc.panda-il.com</strong><small>סביבת הייצור</small></article><article class="metric"><span>CONFIG REVISION</span><strong id="metricRevision">—</strong><small>גרסה פעילה בשרת</small></article><article class="metric"><span>EDITING STATE</span><strong id="metricChanges">טוען</strong><small>שינויים שטרם נשמרו</small></article></div>
+  <div class="panel"><div class="panel-head"><div><p class="eyebrow">QUICK ACTIONS</p><h2>מה תרצה לנהל?</h2></div></div><div class="quick-grid"><button type="button" data-go="contact" class="quick-card"><span>01 / CONTACT</span><strong>פרטי קשר</strong><small>טלפון, וואטסאפ, אימייל וקישורים</small></button><button type="button" data-go="terminal" class="quick-card"><span>02 / PROFILE</span><strong>פרופיל וטרמינל</strong><small>טקסטים, יכולות ופקודות</small></button><button type="button" data-go="marketing" class="quick-card"><span>03 / MARKETING</span><strong>תוכן שיווקי</strong><small>עברית, אנגלית וספרדית</small></button></div></div>
+  <div class="panel info-panel"><h2>עבודה מבוקרת</h2><p>השינויים נשמרים רק בלחיצה על ״שמור באתר״. לפני השמירה המערכת בודקת שגרסת הנתונים בשרת לא השתנתה, וה־API שומר גיבוי לגרסה הקודמת.</p></div>
+ </section>
+ <section class="screen" id="contact" aria-label="פרטי קשר">
+  <div class="panel"><div class="panel-head"><div><p class="eyebrow">GLOBAL CONTACT</p><h2>ערוצי תקשורת</h2><p>הערכים המופיעים באתר ובדפי השיווק.</p></div></div><div class="fields two">
+   <label>טלפון<span>מספר בינלאומי ללא הסימן +</span><input data-path="contact.phone" inputmode="tel" dir="ltr" autocomplete="tel"></label>
+   <label>וואטסאפ<span>מספר בינלאומי</span><input data-path="contact.whatsapp" inputmode="tel" dir="ltr"></label>
+   <label>כתובת דוא״ל<span>תיבת יצירת קשר</span><input data-path="contact.email" type="email" dir="ltr" autocomplete="email"></label>
+   <label>GitHub<span>קישור מלא לפרופיל</span><input data-path="contact.github" type="url" dir="ltr"></label>
+  </div></div>
+ </section>
+ <section class="screen" id="terminal" aria-label="פרופיל וטרמינל">
+  <div class="panel"><div class="panel-head"><div><p class="eyebrow">PROFILE</p><h2>הפרופיל הציבורי</h2><p>עריכת טקסטים שמופיעים במסוף הפרופיל.</p></div></div><div class="fields two"><label>שם משתמש<input data-path="terminal.user" dir="ltr"></label><div></div><label>ביוגרפיה<span>ניתן לכלול HTML התואם לאתר</span><textarea data-path="terminal.bio" rows="5" dir="ltr"></textarea></label><label>כישורים<span>תוכן המסוף, כולל שורות ותגיות</span><textarea data-path="terminal.skills" rows="5" dir="ltr"></textarea></label></div></div>
+  <div class="panel"><div class="panel-head"><div><p class="eyebrow">COMMAND LIBRARY</p><h2>פקודות הטרמינל</h2><p>הגדר טריגר, פלט, כפתור יעד וקישור.</p></div><button type="button" id="addCommand" class="btn secondary">+ פקודה חדשה</button></div><div id="commandsList" class="stack"></div></div>
+ </section>
+ <section class="screen" id="marketing" aria-label="Marketing OS">
+  <div class="panel"><div class="panel-head"><div><p class="eyebrow">MULTILINGUAL CONTENT</p><h2>תוכן שיווקי</h2><p>בחר שפה וערוך תוכן ללא שינוי בשפות האחרות.</p></div><div class="lang-switch" role="group" aria-label="בחירת שפה"><button type="button" data-lang="he" class="active">עברית</button><button type="button" data-lang="en">English</button><button type="button" data-lang="es">Español</button></div></div>
+  <div class="fields two"><label>כותרת ראשית<input id="marketingTitle"></label><label>תגית מקצועית<input id="marketingBadge"></label><label class="span-2">ביוגרפיה שיווקית<span>תוכן מלא לאזור הראשי</span><textarea id="marketingBio" rows="5"></textarea></label></div>
+  </div>
+  <div class="panel"><div class="panel-head"><div><p class="eyebrow">SERVICES</p><h2>שירותים ויכולות</h2><p>ניתן לערוך, לשנות סדר ולהוסיף שירותים.</p></div><button type="button" id="addService" class="btn secondary">+ שירות חדש</button></div><div class="stack" id="servicesList"></div></div>
+ </section>
+ <section class="screen" id="operations" aria-label="מערכת וגרסאות">
+  <div class="panel"><div class="panel-head"><div><p class="eyebrow">VERSION CONTROL</p><h2>שמירה ובקרת שינויים</h2></div></div>
+   <div class="details-grid"><div><span>גרסת נתונים</span><code id="fullRevision">—</code></div><div><span>שינויים ממתינים</span><strong id="pendingState">—</strong></div><div><span>פעולה אחרונה</span><strong id="lastAction">טרם נשמרו שינויים במפגש</strong></div></div>
+   <div class="row-actions"><button type="button" class="btn secondary" id="reloadData">רענן נתונים מהשרת</button><button type="button" class="btn ghost" id="discardChanges">בטל שינויים מקומיים</button></div>
+   <p class="footnote">הגיבויים נוצרים בשרת בזמן שמירה מוצלחת; אין כרגע ממשק לניהול גיבויים או שחזור אוטומטי. אין כאן טענה לבדיקת מצב שרת בזמן אמת.</p>
+  </div>
+ </section>
+</main>
+</div>
+</div>
+<div class="bottom-bar" id="bottomBar"><span id="saveStatus" class="save-state"><span class="status-dot"></span> טוען נתונים…</span><div class="bottom-actions"><button type="button" class="btn ghost" id="cancelChanges">בטל שינויים</button><button type="button" class="btn primary" id="saveButton" disabled>שמור באתר <span aria-hidden="true">↗</span></button></div></div>
 </body>
 </html>
