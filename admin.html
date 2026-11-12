@@ -89,11 +89,11 @@
         </header>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('contact')">📞 פרטי קשר</button>
-            <button class="tab-btn" onclick="switchTab('terminal')">💻 טרמינל</button>
-            <button class="tab-btn" onclick="switchTab('marketing_he')">🇮🇱 שיווק (עברית)</button>
-            <button class="tab-btn" onclick="switchTab('marketing_en')">🇺🇸 שיווק (אנגלית)</button>
-            <button class="tab-btn" onclick="switchTab('marketing_es')">🇪🇸 שיווק (ספרדית)</button>
+            <button class="tab-btn active" onclick="switchTab('contact', this)">📞 פרטי קשר</button>
+            <button class="tab-btn" onclick="switchTab('terminal', this)">💻 טרמינל</button>
+            <button class="tab-btn" onclick="switchTab('marketing_he', this)">🇮🇱 שיווק (עברית)</button>
+            <button class="tab-btn" onclick="switchTab('marketing_en', this)">🇺🇸 שיווק (אנגלית)</button>
+            <button class="tab-btn" onclick="switchTab('marketing_es', this)">🇪🇸 שיווק (ספרדית)</button>
         </div>
 
         <div id="contact" class="tab-content active">
@@ -206,11 +206,11 @@
         } else alert('סיסמה שגויה!');
     }
 
-    function switchTab(id) {
+    function switchTab(id, button) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        event.target.classList.add('active');
+        if (button) button.classList.add('active');
     }
 
     function loadData() {
