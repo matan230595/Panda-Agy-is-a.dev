@@ -1,0 +1,54 @@
+name: Secure Admin Quality Gate
+
+on:
+  pull_request:
+    paths:
+      - 'admin/**'
+      - '.github/workflows/admin-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP syntax and security assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in admin/*.php; do php -l "$file"; done
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          admin = Path('admin/index.php').read_text()
+          common = Path('admin/common.php').read_text()
+          api = Path('admin/api.php').read_text()
+          assert 'eval(' not in admin
+          assert 'panda2026' not in admin
+          assert 'window.SITE_DATA' in admin
+          assert 'function initializeAdmin()' in admin
+          assert 'async function save()' in admin
+          assert 'version_conflict' in api
+          assert 'hash_equals' in api
+          assert 'password_verify' in Path('admin/login.php').read_text()
+          assert 'flock(' in api and 'rename(' in api
+          assert "secure'=>true" in common
+          js = re.findall(r'<script>([\s\S]*?)</script>', admin, re.I)
+          assert js
+          for n, snippet in enumerate(js):
+              if snippet.strip():Path(f'/tmp/admin-inline-{n}.js').write_text(snippet)
+          print('RESULT: SECURITY_ASSERTIONS_OK')
+          PY
+          for file in /tmp/admin-inline-*.js; do
+            test -e "$file" || continue
+            node --check "$file"
+          done
+          echo "RESULT: PHP_AND_JS_SYNTAX_OK"
+      - name: Isolated PHP integration test
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/admin_integration.py
