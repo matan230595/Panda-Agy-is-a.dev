@@ -54,8 +54,19 @@ jobs:
           grep -RIlFs 'bc.panda-il.com' /etc/nginx /etc/apache2 /home/*/conf/web 2>/dev/null | head -30 || true
           echo "=== Hestia authoritative check ==="
           sudo -n /usr/local/sbin/panda-check-bc-domain
-          echo "=== DNS A records ==="
-          if command -v dig >/dev/null 2>&1; then dig +short bc.panda-il.com A; else getent ahostsv4 bc.panda-il.com | head -3 || true; fi
+          echo "=== DNS validation ==="
+          expected="164.68.109.11"
+          if ! command -v dig >/dev/null 2>&1; then echo "ERROR: dig unavailable"; exit 1; fi
+          answers="$(dig +short bc.panda-il.com A | grep -E '^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+
+          echo "=== Completed: read-only check; absent output is not proof of availability ==="
+          REMOTE
+      - name: Cleanup
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519
+ || true)"
+          if [ -z "$answers" ]; then echo "ERROR: DNS_A_NOT_FOUND"; exit 1; fi
+          if [ "$answers" != "$expected" ]; then echo "ERROR: DNS_A_UNEXPECTED_OR_MULTIPLE"; exit 1; fi
+          echo "RESULT: DNS_POINTS_TO_VPS1"
           echo "=== Completed: read-only check; absent output is not proof of availability ==="
           REMOTE
       - name: Cleanup
