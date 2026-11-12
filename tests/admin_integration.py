@@ -32,7 +32,8 @@ with tempfile.TemporaryDirectory(prefix="bc-admin-test-") as td:
     (private/"password.hash").write_text(hashed)
     proc=subprocess.Popen(["php","-S","127.0.0.1:18739","-t",str(site)],stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
     base="http://127.0.0.1:18739"
-    jar=http.cookiejar.CookieJar()\n    opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
+    jar=http.cookiejar.CookieJar()
+    opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
     def request(path, data=None, headers=None):
         nonlocal_placeholder=None
         h=dict(headers or {})
