@@ -52,6 +52,8 @@ jobs:
           find /home -maxdepth 4 -type d -name 'bc.panda-il.com' -print 2>/dev/null || true
           echo "=== Web config references (accessible files only) ==="
           grep -RIlFs 'bc.panda-il.com' /etc/nginx /etc/apache2 /home/*/conf/web 2>/dev/null | head -30 || true
+          echo "=== Hestia authoritative check ==="
+          sudo -n /usr/local/sbin/panda-check-bc-domain
           echo "=== DNS A records ==="
           if command -v dig >/dev/null 2>&1; then dig +short bc.panda-il.com A; else getent ahostsv4 bc.panda-il.com | head -3 || true; fi
           echo "=== Completed: read-only check; absent output is not proof of availability ==="
