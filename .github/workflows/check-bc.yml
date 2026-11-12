@@ -19,7 +19,7 @@ jobs:
           KNOWN: ${{ secrets.VPS1_KNOWN_HOSTS }}
         run: |
           if [[ -z "$HOST" || -z "$SSH_USER" || -z "$SSH_KEY_B64" || -z "$KNOWN" ]]; then
-            echo "::error::Missing VPS1_HOST, VPS1_USER, VPS1_SSH_KEY_B64, or VPS1_KNOWN_HOSTS"
+            echo "::error::Missing required VPS1 connection secret"
             exit 1
           fi
       - name: Configure and validate SSH key
@@ -29,46 +29,33 @@ jobs:
         run: |
           umask 077
           mkdir -p ~/.ssh
-          if ! printf '%s' "$SSH_KEY_B64" | base64 --decode > ~/.ssh/id_ed25519; then
-            echo "::error::SSH key secret is not valid base64"
-            exit 1
-          fi
+          printf '%s' "$SSH_KEY_B64" | base64 --decode > ~/.ssh/id_ed25519
           printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
-          if ! ssh-keygen -y -P '' -f ~/.ssh/id_ed25519 >/dev/null 2>&1; then
-            echo "::error::Decoded SSH private key is invalid or encrypted; check VPS1_SSH_KEY_B64"
-            exit 1
-          fi
-          echo "SSH key format validated"
-      - name: Inspect hostname reservation (no changes)
+          ssh-keygen -y -P '' -f ~/.ssh/id_ed25519 >/dev/null
+          echo "RESULT: SSH_KEY_VALID"
+      - name: Inspect Hestia reservation and DNS
         env:
           HOST: ${{ secrets.VPS1_HOST }}
           SSH_USER: ${{ secrets.VPS1_USER }}
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=12 -o ConnectionAttempts=1 "$SSH_USER@$HOST" 'sh -s' <<'REMOTE'
+          ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=12 "$SSH_USER@$HOST" 'sh -se' <<'REMOTE'
           echo "=== Server ==="
           hostname
-          echo "=== Web directory matches ==="
-          find /home -maxdepth 4 -type d -name 'bc.panda-il.com' -print 2>/dev/null || true
-          echo "=== Web config references (accessible files only) ==="
-          grep -RIlFs 'bc.panda-il.com' /etc/nginx /etc/apache2 /home/*/conf/web 2>/dev/null | head -30 || true
-          echo "=== Hestia authoritative check ==="
+          echo "=== Hestia registration ==="
           sudo -n /usr/local/sbin/panda-check-bc-domain
-          echo "=== DNS validation ==="
-          expected="164.68.109.11"
-          if ! command -v dig >/dev/null 2>&1; then echo "ERROR: dig unavailable"; exit 1; fi
-          answers="$(dig +short bc.panda-il.com A | grep -E '^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+
-          echo "=== Completed: read-only check; absent output is not proof of availability ==="
-          REMOTE
-      - name: Cleanup
-        if: always()
-        run: rm -f ~/.ssh/id_ed25519
- || true)"
-          if [ -z "$answers" ]; then echo "ERROR: DNS_A_NOT_FOUND"; exit 1; fi
-          if [ "$answers" != "$expected" ]; then echo "ERROR: DNS_A_UNEXPECTED_OR_MULTIPLE"; exit 1; fi
+          echo "=== DNS verification ==="
+          if ! command -v dig >/dev/null 2>&1; then
+            echo "ERROR: dig unavailable"
+            exit 1
+          fi
+          answers="$(dig +short bc.panda-il.com A)"
+          if [ "$answers" != "164.68.109.11" ]; then
+            echo "ERROR: DNS_A_NOT_EXACTLY_VPS1"
+            exit 1
+          fi
           echo "RESULT: DNS_POINTS_TO_VPS1"
-          echo "=== Completed: read-only check; absent output is not proof of availability ==="
           REMOTE
-      - name: Cleanup
+      - name: Cleanup SSH key
         if: always()
         run: rm -f ~/.ssh/id_ed25519
