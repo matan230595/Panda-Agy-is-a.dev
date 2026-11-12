@@ -218,7 +218,7 @@
             const isHome = t === 'home';
             const title = isHome ? (lang=='he'?'פרופיל':'Profile') : d.services[t].title.split(' ')[0];
             const cls = t === active ? 'active' : '';
-            return `<div class="tab ${cls}" onclick="openTab('${t}')">${isHome?'🏠':''} ${title} ${!isHome?`<span class="close-tab" onclick="closeTab(event, ${JSON.stringify(t)})">✕</span>`:''}</div>`;
+            return `<div class="tab ${cls}" onclick="openTab(${JSON.stringify(t)})">${isHome?'🏠':''} ${title} ${!isHome?`<span class="close-tab" onclick="closeTab(event, ${JSON.stringify(t)})">✕</span>`:''}</div>`;
         }).join('');
     }
 
