@@ -1,0 +1,70 @@
+name: Stage BC Secure Admin (private, no deployment)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stage-admin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 8b7e6db015a25a6c61c7dc3ea64fc5da8cdbe572
+      - name: Validate source PHP and prevent public production deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          for p in admin/common.php admin/login.php admin/api.php admin/index.php admin/logout.php; do
+            test -s "$p"
+            php -l "$p"
+          done
+          test ! -e ./admin/password.hash
+          if grep -R -E 'eval\(|panda2026' admin/*.php; then echo "::error::Unsafe code"; exit 1; fi
+          echo "RESULT: LOCAL_PHP_LINT_OK"
+      - name: Configure SSH from existing secrets
+        shell: bash
+        env:
+          HOST: ${{ secrets.VPS1_HOST }}
+          SSH_USER: ${{ secrets.VPS1_USER }}
+          SSH_KEY_B64: ${{ secrets.VPS1_SSH_KEY_B64 }}
+          KNOWN: ${{ secrets.VPS1_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "$HOST" && test -n "$SSH_USER" && test -n "$SSH_KEY_B64" && test -n "$KNOWN"
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s' "$SSH_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+          ssh-keygen -y -P '' -f ~/.ssh/id_ed25519 >/dev/null
+      - name: Upload only to non-public private staging and test PHP CLI
+        shell: bash
+        env:
+          HOST: ${{ secrets.VPS1_HOST }}
+          SSH_USER: ${{ secrets.VPS1_USER }}
+        run: |
+          set -euo pipefail
+          SSH_OPTS="-i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o BatchMode=yes -o ConnectTimeout=12"
+          ssh $SSH_OPTS "$SSH_USER@$HOST" 'set -eu; umask 077; mkdir -p "$HOME/bc-admin-staging"; chmod 700 "$HOME/bc-admin-staging"'
+          scp $SSH_OPTS admin/*.php "$SSH_USER@$HOST:bc-admin-staging/"
+          ssh $SSH_OPTS "$SSH_USER@$HOST" 'sh -se' <<'REMOTE'
+          umask 077
+          cd "$HOME/bc-admin-staging"
+          chmod 600 ./*.php
+          echo "=== PHP runtime ==="
+          if ! command -v php >/dev/null 2>&1; then
+            echo "ERROR: PHP_CLI_UNAVAILABLE"
+            exit 1
+          fi
+          for file in ./*.php; do php -l "$file" || exit 1; done
+          echo "=== File permissions ==="
+          stat -c '%a %U:%G %n' "$HOME/bc-admin-staging" ./*.php
+          echo "RESULT: SECURE_ADMIN_STAGED_PRIVATE"
+          REMOTE
+      - name: Cleanup private key
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519
