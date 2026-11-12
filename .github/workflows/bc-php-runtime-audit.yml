@@ -1,0 +1,62 @@
+name: Audit BC PHP runtime (read only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  runtime-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Prepare SSH
+        env:
+          HOST: ${{ secrets.VPS1_HOST }}
+          SSH_USER: ${{ secrets.VPS1_USER }}
+          SSH_KEY_B64: ${{ secrets.VPS1_SSH_KEY_B64 }}
+          KNOWN: ${{ secrets.VPS1_KNOWN_HOSTS }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$HOST" && test -n "$SSH_USER" && test -n "$SSH_KEY_B64" && test -n "$KNOWN"
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s' "$SSH_KEY_B64" | base64 --decode > ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+          ssh-keygen -y -P '' -f ~/.ssh/id_ed25519 >/dev/null
+      - name: Audit runtime and target permissions (no changes)
+        env:
+          HOST: ${{ secrets.VPS1_HOST }}
+          SSH_USER: ${{ secrets.VPS1_USER }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=12 "$SSH_USER@$HOST" 'sh -s' <<'REMOTE'
+          set -eu
+          echo '=== Server ==='
+          hostname
+          echo '=== PHP CLI availability (not proof of web PHP) ==='
+          if command -v php >/dev/null 2>&1; then php -r 'echo "PHP_CLI=".PHP_VERSION.PHP_EOL;'; else echo 'PHP_CLI_UNAVAILABLE'; fi
+          echo '=== Site paths and ownership ==='
+          for p in /home/matanadmin/web/bc.panda-il.com/public_html /home/matanadmin/web/bc.panda-il.com/public_html/config.js /home/matanadmin/.panda-bc-admin; do
+            if [ -e "$p" ]; then stat -c '%A %U:%G %n' "$p"; else echo "NOT_FOUND_OR_INACCESSIBLE: $p"; fi
+          done
+          echo '=== Accessible domain configuration files ==='
+          for p in /home/matanadmin/conf/web/bc.panda-il.com/nginx.conf /home/matanadmin/conf/web/bc.panda-il.com/apache2.conf; do
+            if [ -r "$p" ]; then
+              echo "READABLE: $p"
+              grep -E 'php|proxy_pass|fastcgi_pass|SetHandler|FilesMatch' "$p" | head -15 || true
+            else echo "NOT_READABLE: $p"; fi
+          done
+          echo '=== Live endpoint checks (TLS verified) ==='
+          for path in / /marketing.html /admin.html /admin/login.php; do
+            curl --max-time 12 -sS -o /dev/null -w "$path HTTP=%{http_code} SSL=%{ssl_verify_result}\n" "https://bc.panda-il.com$path" || true
+          done
+          echo 'RESULT: BC_RUNTIME_AUDIT_COMPLETE'
+          REMOTE
+      - name: Cleanup
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519
