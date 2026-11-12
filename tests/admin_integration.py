@@ -27,7 +27,8 @@ with tempfile.TemporaryDirectory(prefix="bc-admin-test-") as td:
     source=source.replace(old,"const AUTH_DIR="+json.dumps(str(private))+";")
     source=source.replace(old2,"const SITE_CONFIG="+json.dumps(str(config))+";")
     # HTTP loopback fixture only; production common.php remains Secure-cookie HTTPS-only.
-    source=source.replace("'secure'=>true", "'secure'=>false")\n    common.write_text(source)
+    source=source.replace("'secure'=>true", "'secure'=>false")
+    common.write_text(source)
     password=secrets.token_urlsafe(25)
     hashed=subprocess.check_output(["php","-r","echo password_hash($argv[1], PASSWORD_DEFAULT);",password],text=True).strip()
     (private/"password.hash").write_text(hashed)
